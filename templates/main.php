@@ -86,6 +86,7 @@ In your solution, focus on correctness. The performance of your solution will no
 
                 <div class="col-xs-12">
                     <textarea id="c-code">
+<?=$context?>
                     </textarea>
                     <div style="font-size: 13px; width: 300px; height: 30px;">Key buffer: <span id="command-display"></span></div>
                     </div>

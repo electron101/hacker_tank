@@ -12,7 +12,8 @@ function loadStart()
 
 function loadBase()
 {
-    $render = new Render("templates/main.php");
+	$code = file_get_contents("data/code_templates/cyclic_rotation/c/org_snippet");
+    $render = new Render("templates/main.php", $code);
     return $render -> renderPage();
 }
 

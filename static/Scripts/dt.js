@@ -1,5 +1,4 @@
 $(document).ready(function(){
-
   //получаем subj выделенного элемента списка
   var subj = $("#list [class = active]").attr('subj');
   do_ajax(subj);
@@ -107,6 +106,24 @@ $(document).ready(function(){
       }
     });
     /** РЕГИСТРАЦИЯ КОНЕЦ */
+	
+	 $('#lang').on('change', function()
+      {
+          var lang = $(this).val();
+		  if (lang == 0)
+			ceditor.setoption("mode", "text/x-csrc");
+          if (lang == 1)
+			ceditor.setoption("mode", "text/x-csharp");
+		  // //подгружаем файл сниппета
+		  // $.ajax({
+              // url: "",
+              // type: "POST",
+              // data: {'act': 'change_lang', 'lang': lang},
+              // cache: false
+          // }).done(function(answ){
+			  // $('#c-code').text(answ);
+          // })
+      });
 
   /** CODEMIRROR */
     var cEditor = CodeMirror.fromTextArea(document.getElementById("c-code"), {
@@ -116,24 +133,6 @@ $(document).ready(function(){
         lineNumbers: true,
         matchBrackets: true,
         mode: "text/x-csrc",
-      });
-
-      $('#lang').on('change', function()
-      {
-          var lang = $(this).val();
-		  if (lang == 0)
-			ceditor.setoption("mode", "text/x-csrc");
-          if (lang == 1)
-			ceditor.setoption("mode", "text/x-csharp");
-		  //подгружаем файл сниппета
-		  $.ajax({
-              url: "",
-              type: "POST",
-              data: {'act': 'change_lang', 'lang': lang},
-              cache: false
-          }).done(function(answ){
-			  $('#c-code').text(answ);
-          })
       });
 
       $('#keymap').on('change', function()
