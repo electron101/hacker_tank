@@ -131,6 +131,11 @@ function do_reg()
     }
 }
 
+//создание файловой структуры пользовательских папок
+function create_file_structure()
+{
+	
+}
 
 // создание переменных сессии
 function session_variables_create($login, $role, $id)
