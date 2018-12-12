@@ -1,0 +1,24 @@
+#formation_table tbody tr.active td 
+{
+	color: #fff;
+	background-color: #3F8FD2;
+}
+
+#formation_table tbody tr:hover td
+{
+		background-color: #C8CDDB;
+}
+
+#offices_table td
+{
+	font-size: 12px;
+}
+
+#users_table th
+{
+	font-size: 12px;
+}
+
+.CodeMirror {
+	height: 75%;
+}
