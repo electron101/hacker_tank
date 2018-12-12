@@ -27,12 +27,14 @@ $(document).ready(function(){
 
   $('#apply, #run').on('click', function(e){
     e.preventDefault();
-    var val = ($(this).attr('value'));
-    var code = ($('#c-code').val());
+    var val  = ($(this).attr('value'));
+    var code = cEditor.getValue();
+    var lang = ($('#lang').val());
+    var task_name = $('#task_name').val();
     $.ajax({
       url: "",
       type: "POST",
-      data: {'act': "compile_this", 'val': val, 'code': code},
+      data: {'act': "compile_this", 'val': val, 'code': code, 'lang': lang, 'task_name': task_name},
       cache: false
     }).done(function(msg){
       alert(msg);
@@ -110,25 +112,25 @@ $(document).ready(function(){
 	 $('#lang').on('change', function()
       {
           var lang = $(this).val();
-		  if (lang == 0)
+		  if (lang == "c")
 			ceditor.setoption("mode", "text/x-csrc");
-          if (lang == 1)
+          if (lang == "sharp")
 			ceditor.setoption("mode", "text/x-csharp");
-		  // //подгружаем файл сниппета
-		  // $.ajax({
-              // url: "",
-              // type: "POST",
-              // data: {'act': 'change_lang', 'lang': lang},
-              // cache: false
-          // }).done(function(answ){
-			  // $('#c-code').text(answ);
-          // })
+		   //подгружаем файл сниппета
+		   $.ajax({
+            url: "",
+               type: "POST",
+               data: {'act': 'change_lang', 'lang': lang},
+               cache: false
+           }).done(function(answ){
+			   cEditor.setValue(answ);
+           })
       });
 
   /** CODEMIRROR */
     var cEditor = CodeMirror.fromTextArea(document.getElementById("c-code"), {
         matchBrackets: true,
-        theme: "darcula",
+        theme: "dracula",
         keyMap: "default",
         lineNumbers: true,
         matchBrackets: true,

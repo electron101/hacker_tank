@@ -12,8 +12,10 @@ function loadStart()
 
 function loadBase()
 {
-	$code = file_get_contents("data/code_templates/cyclic_rotation/c/org_snippet");
-    $render = new Render("templates/main.php", $code);
+    $input = $GLOBALS['input'];
+	$context['code'] = file_get_contents("data/code_templates/cyclic_rotation/c/org_snippet");
+	$context['task_name'] = $input['task_name'];
+    $render = new Render("templates/main.php", $context);
     return $render -> renderPage();
 }
 
@@ -24,10 +26,10 @@ function change_lang()
 	$lang = isset($input['lang']) ? $input['lang'] : "";
 	switch($lang)
 	{
-		case "0":
+		case "c":
 			$code = file_get_contents("data/code_templates/cyclic_rotation/c/org_snippet");
 			break;
-		case "1":
+		case "sharp":
 			$code = file_get_contents("data/code_templates/cyclic_rotation/sharp/org_snippet");
 			break;
 		default:
@@ -47,8 +49,167 @@ function login()
 function compile_this()
 {
     $input = $GLOBALS['input'];
-    $code = isset($input['code']) ? $input['code'] : "";
-    echo 'Так-то! '.$code;
+    $val       = isset($input['val']) ? $input['val'] : "";
+    $code      = isset($input['code']) ? $input['code'] : "";
+    $lang      = isset($input['lang']) ? $input['lang'] : "";
+    $task_name = isset($input['task_name']) ? $input['task_name'] : "";
+
+	$root_path = "data/users/".$_SESSION['login']."/".$task_name."/".$lang."/";
+	switch ($val) 
+	{
+		case "example" :
+			compile_example_test($code ,$lang, $task_name, $root_path);
+			break;
+
+		case "extend" :
+			compile_extend_test($code, $lang, $task_name, $root_path);
+			break;
+	}
+}
+
+function compile_example_test($code, $lang, $task_name, $root_path)
+{
+	if ($lang == "c")
+	{
+		// $ext = "c";
+		// $tail_test_example = '_test_example.'.$lang;
+		$file_examle_test = $root_path.$task_name.'_test_example.c';
+		
+		clean_file($root_path.'done_code.c');
+		file_put_contents($root_path.'done_code.c', file_get_contents($file_examle_test).$code);
+		
+		// gcc cyclic_rotation_test_example.c general.c -lm -o example
+		clean_file($root_path.'done_test.out');
+		$output = passthru("sh -c 'gcc ".$root_path."done_code.c ".$root_path."general.c -lm -o ".$root_path."done_test.out 2>&1'", $ret_val);
+		
+		// return $result_array = ['ret_val' => $ret_val, 'out_to_console' => $out_to_console];
+		
+		/* не удачная компиляция */
+		if ($ret_val == 1) 
+		{
+			// return $result_array = ['ret_val' => $ret_val, 'out_to_console' => $out_to_console];
+			echo "Ошибка компиляции\n\n";
+			echo $output;
+			exit();
+		}
+		/* удачная компиляция */
+		if ($ret_val == 0) 
+		{
+			echo "Успешная компиляция\n\n";
+
+			$output = passthru("sh -c '".$root_path."./done_test.out'", $ret_val);
+			echo $output;
+			exit();
+		}
+	}
+
+	if ($lang == "sharp")
+	{
+		// mcs -out:done_test.out cyclic_rotation_test_example.cs cyclic_rotation_test.cs general.cs
+		$file_examle_test = $root_path.$task_name.'_test_example.cs';
+
+		clean_file($root_path.'done_code.cs');
+		file_put_contents($root_path.'done_code.cs', file_get_contents($file_examle_test).$code);
+
+		clean_file($root_path.'done_test.out');
+		$output = passthru("sh -c 'mcs -out:".$root_path."done_test.out ".$root_path."done_code.cs ".$root_path.$task_name."_test.cs ".$root_path."general.cs  2>&1'", $ret_val);
+		
+		/* не удачная компиляция */
+		if ($ret_val == 1) 
+		{
+			// return $result_array = ['ret_val' => $ret_val, 'out_to_console' => $out_to_console];
+			echo "Ошибка компиляции\n\n";
+			echo $output;
+			exit();
+		}
+		/* удачная компиляция */
+		if ($ret_val == 0) 
+		{
+			echo "Успешная компиляция\n\n";
+
+			$output = passthru("sh -c 'mono ".$root_path."done_test.out'", $ret_val);
+			echo $output;
+			exit();
+		}
+	}
+
+}
+
+function compile_extend_test($code, $lang, $task_name, $root_path)
+{
+	if ($lang == "c")
+	{
+		$file_extend_test = $root_path.$task_name.'_test_extend.c';
+		
+		clean_file($root_path.'done_code.c');
+		file_put_contents($root_path.'done_code.c', file_get_contents($file_extend_test).$code);
+		
+		clean_file($root_path.'done_test.out');
+		$output = passthru("sh -c 'gcc ".$root_path."done_code.c ".$root_path."general.c -lm -o ".$root_path."done_test.out 2>&1'", $ret_val);
+		
+		// return $result_array = ['ret_val' => $ret_val, 'out_to_console' => $out_to_console];
+		
+		/* не удачная компиляция */
+		if ($ret_val == 1) 
+		{
+			echo "error|";
+			echo $output;
+			exit();
+		}
+		/* удачная компиляция */
+		if ($ret_val == 0) 
+		{
+			$output = passthru("sh -c '".$root_path."./done_test.out'", $ret_val);
+			echo $output;
+			exit();
+		}
+	}
+	
+	if ($lang == "sharp")
+	{
+		// mcs -out:done_test.out cyclic_rotation_test_example.cs cyclic_rotation_test.cs general.cs
+		$file_extend_test = $root_path.$task_name.'_test_extend.cs';
+		
+		clean_file($root_path.'done_code.cs');
+		file_put_contents($root_path.'done_code.cs', file_get_contents($file_extend_test).$code);
+		
+		clean_file($root_path.'done_test.out');
+		$output = passthru("sh -c 'mcs -out:".$root_path."done_test.out ".$root_path."done_code.cs ".$root_path.$task_name."_test.cs ".$root_path."general.cs  2>&1'", $ret_val);
+		
+		/* не удачная компиляция */
+		if ($ret_val == 1) 
+		{
+			echo "error|";
+			echo $output;
+			exit();
+		}
+		/* удачная компиляция */
+		if ($ret_val == 0) 
+		{
+			$output = passthru("sh -c 'mono ".$root_path."done_test.out'", $ret_val);
+			echo $output;
+			exit();
+		}
+	}
+
+}
+
+// удалить существующий файл
+function delete_file($filename)
+{
+	if (file_exists($filename))
+	{
+		unlink($filename);
+	}
+}
+
+// очистить существующий файл
+function clean_file($filename)
+{
+	if (file_exists($filename))
+	{
+		file_put_contents($filename, "");
+	}
 }
 
 //подгрузить задания по выбранной тематике в правую часть
@@ -58,7 +219,7 @@ function load_selected_subject()
     <h1>Iterations</h1>
     <h3>Задачи:</h3>
     <ul>
-        <li><a href='?act=code'>Задача 1</a></li>
+        <li><a href='?act=code&task_name=cyclic_rotation'>Задача 1</a></li>
         <li>Задача 2</li>
     </il>
     ";
@@ -160,7 +321,8 @@ function create_file_structure($name, $loc)
 	switch($loc)
 	{
 		case "users":
-			mkdir("data/users/$name", 0700);
+			// mkdir("data/users/$name", 0700);
+			mkdir("data/users/$name", 777);
 			break;
 	}
 }

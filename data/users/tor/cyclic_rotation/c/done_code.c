@@ -425,3 +425,36 @@ int main()
 
 	return 0;
 }
+class Solution {
+        public int[] solution(int[] A, int K) {
+                // write your code in C# 6.0 with .NET 4.5 (Mono)
+
+                int N = A.Length;
+
+                if (K == N)
+                        return A;
+
+                if (N == 1)
+                        return A;
+
+                if (K == 0 || N == 0)
+                        return A;
+
+
+                int[] B = new int[N];
+
+                for (int j = 0; j < K; ++j) {
+                        B[0] = A[N - 1];
+
+                        for (int i = 0; i < N - 1; ++i)
+                                B[i + 1] = A[i];
+
+                        for (int i = 0; i < N; ++i) 
+                                A[i] = B[i];
+                }
+
+                A = B;
+
+                return A;
+        }
+}

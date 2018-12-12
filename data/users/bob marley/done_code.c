@@ -8,3 +8,4 @@ struct Results solution(int A[], int N, int K) {
     result.N = ...
     return result;
 }
+                    

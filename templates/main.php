@@ -73,26 +73,27 @@ In your solution, focus on correctness. The performance of your solution will no
                         <option value="0" selected>Обычный</option>
                         <option value="1">VIM</option>
                     </select>
+                    <input type="hidden" id="task_name" name="task_name" value="<?=$context['task_name']?>">
                 </div>
                 <div class="col-xs-2" style="margin-bottom: 5px;">
                     <select name="lang" id="lang" class="form-control select" style="width: 120px;">
-                        <option value="0" selected>C</option>
-                        <option value="1">C#</option>
+                        <option value="c" selected>C</option>
+                        <option value="sharp">C#</option>
                     </select>
                 </div>
                 <div class="col-xs-2" style="border: 0px solid black;">
-                    <button type="button" class="btn btn-primary" id="apply" value="full" style="margin-left:15px;"><i class="fa fa-check"></i> Подтвердить</button>
+                    <button type="button" class="btn btn-primary" id="apply" value="extend" style="margin-left:15px;"><i class="fa fa-check"></i> Подтвердить</button>
                 </div>
 
                 <div class="col-xs-12">
                     <textarea id="c-code">
-<?=$context?>
+<?=$context['code']?>
                     </textarea>
                     <div style="font-size: 13px; width: 300px; height: 30px;">Key buffer: <span id="command-display"></span></div>
                     </div>
                     <div class="col-xs-12">
                     <div class="col-xs-10" style="background-color: #eeeeee; min-height: 40px; padding: 2px;"><b>Вывод</b></div>
-                    <div class="col-xs-2" style="background-color: #eeeeee; min-height: 40px;  padding: 2px;"><button type="button" class="btn btn-success" id="run" value="test" style="margin-left:15px;"><i class="fa fa-play"></i> Запуск</button></div>
+                    <div class="col-xs-2" style="background-color: #eeeeee; min-height: 40px;  padding: 2px;"><button type="button" class="btn btn-success" id="run" value="example" style="margin-left:15px;"><i class="fa fa-play"></i> Запуск</button></div>
                     </div>
                     <div class="col-xs-12" id="output">
 

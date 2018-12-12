@@ -22,6 +22,7 @@
 		<link rel="stylesheet" href="static/codemirror/lib/codemirror.css">
 		<link rel="stylesheet" href="static/codemirror/addon/hint/show-hint.css">
 		<link rel="stylesheet" href="static/codemirror/theme/darcula.css">
+		<link rel="stylesheet" href="static/codemirror/theme/dracula.css">
 
 		<!-- собственные стили -->
 		<link rel="stylesheet" href="static/css/mycss.css">

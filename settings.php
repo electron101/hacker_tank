@@ -16,7 +16,7 @@ $DATABASES = [
 		"NAME" => "cod",
 		"HOST" => "localhost",
 		"USER" => "root",
-		"PASSWORD" => "",
+		"PASSWORD" => "1991",
 		"CHARSET" => "UTF-8"
 	]
 ];
