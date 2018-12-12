@@ -121,10 +121,19 @@ $(document).ready(function(){
       $('#lang').on('change', function()
       {
           var lang = $(this).val();
-          if (lang == 0)
-            cEditor.setOption("mode", "text/x-csrc");
+		  if (lang == 0)
+			ceditor.setoption("mode", "text/x-csrc");
           if (lang == 1)
-            cEditor.setOption("mode", "text/x-csharp");
+			ceditor.setoption("mode", "text/x-csharp");
+		  //подгружаем файл сниппета
+		  $.ajax({
+              url: "",
+              type: "POST",
+              data: {'act': 'change_lang', 'lang': lang},
+              cache: false
+          }).done(function(answ){
+			  $('#c-code').text(answ);
+          })
       });
 
       $('#keymap').on('change', function()

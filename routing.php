@@ -47,6 +47,9 @@ switch($act)
 	case "compile_this":
 		compile_this();
 		break;
+	case "change_lang":
+		change_lang();
+		break;
 	default:
 		loadStart();
 		break;

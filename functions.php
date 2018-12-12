@@ -16,6 +16,27 @@ function loadBase()
     return $render -> renderPage();
 }
 
+//смена языка
+function change_lang()
+{
+	$input = $GLOBALS['input'];
+	$lang = isset($input['lang']) ? $input['lang'] : "";
+	switch($lang)
+	{
+		case "0":
+			$code = file_get_contents("data/code_templates/cyclic_rotation/c/org_snippet");
+			break;
+		case "1":
+			$code = file_get_contents("data/code_templates/cyclic_rotation/sharp/org_snippet");
+			break;
+		default:
+			$code = file_get_contents("data/code_templates/cyclic_rotation/c/org_snippet");
+			break;
+		
+		echo $org_snippet;
+	}
+}
+
 function login()
 {
     $render = new Render("templates/login.php");
@@ -115,7 +136,7 @@ function do_reg()
     }
 
     $query = "Insert Into polzov (name, pas, role) VALUES (?,?,?)";
-    $params = array('stas', '123', 1); //1-обычный пользак
+    $params = array($login, $pass, 1); //1-обычный пользак
     $types = "ssi";
 
     $res = bd_interaction($query, $params, $types);
@@ -126,15 +147,21 @@ function do_reg()
     }
     else
     {
+		create_file_structure($login, 'users');
         echo 1000;
         exit;
     }
 }
 
 //создание файловой структуры пользовательских папок
-function create_file_structure()
+function create_file_structure($name, $loc)
 {
-	
+	switch($loc)
+	{
+		case "users":
+			mkdir("data/users/$name", 0700);
+			break;
+	}
 }
 
 // создание переменных сессии
