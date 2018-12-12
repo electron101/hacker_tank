@@ -6,10 +6,6 @@ session_start();
 файл для соединения с бд,
 файл с функциями, файл маршрутизации
 */
-//Соединение с бд
-$CONN = null;
-//Возможные сообщения
-$MESSAGE = "";
 
 if (isset($_POST) || isset($_GET)) $input = array_merge($_GET, $_POST);
 

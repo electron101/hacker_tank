@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.7.1
+-- version 4.8.3
 -- https://www.phpmyadmin.net/
 --
 -- Хост: localhost
--- Время создания: Дек 12 2018 г., 04:50
--- Версия сервера: 5.7.18
--- Версия PHP: 7.1.5
+-- Время создания: Дек 12 2018 г., 06:56
+-- Версия сервера: 10.2.15-MariaDB
+-- Версия PHP: 7.2.5
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -132,8 +132,7 @@ CREATE TABLE `task_lang` (
   `id_task_lang` int(11) NOT NULL,
   `id_task` int(11) NOT NULL,
   `id_lang` int(11) NOT NULL,
-  `template_link` varchar(100) NOT NULL,
-  `template_link_extend` varchar(100) NOT NULL
+  `template_link_folder_code` varchar(512) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -198,41 +197,49 @@ ALTER TABLE `task_lang`
 --
 ALTER TABLE `category`
   MODIFY `id_category` int(11) NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT для таблицы `done_task`
 --
 ALTER TABLE `done_task`
   MODIFY `id_done_task` int(11) NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT для таблицы `lang`
 --
 ALTER TABLE `lang`
   MODIFY `id_lang` int(11) NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT для таблицы `lessons`
 --
 ALTER TABLE `lessons`
   MODIFY `id_lesson` int(11) NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT для таблицы `polzov`
 --
 ALTER TABLE `polzov`
   MODIFY `id_polzov` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
 --
 -- AUTO_INCREMENT для таблицы `statistic`
 --
 ALTER TABLE `statistic`
   MODIFY `id_statistic` int(11) NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT для таблицы `task`
 --
 ALTER TABLE `task`
   MODIFY `id_task` int(11) NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT для таблицы `task_lang`
 --
 ALTER TABLE `task_lang`
-  MODIFY `id_task_lang` int(11) NOT NULL AUTO_INCREMENT;COMMIT;
+  MODIFY `id_task_lang` int(11) NOT NULL AUTO_INCREMENT;
+COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
