@@ -33,7 +33,7 @@
 				<!-- Header Navbar -->
 				<nav class="navbar navbar-static-top" role="navigation">
 					<!-- Sidebar toggle button-->
-					<a href="" style="color: #000; font-family: consolas; font-size: 24; padding-left: 25%;"><b>New C0dility</b></a>
+					<a href="?act=loadStart" style="color: #000; font-family: consolas; font-size: 24; padding-left: 25%;"><b>HACKER TANK</b></a>
 					<!-- Пользователь -->
 					<div class="navbar-custom-menu">
 						<?php if (isset($_SESSION['login'])): ?>

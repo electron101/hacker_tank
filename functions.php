@@ -6,15 +6,61 @@ include ("classes/ssa/moldmaker.php");
 /** Основные функции */
 function loadStart()
 {
-    $render = new Render("templates/start_page.php");
-    return $render -> renderPage();
+	$query = "Select * From lessons order by id_lesson";
+	$context = LoadDataFromDB($query);
+    $render = new Render("templates/start_page.php", $context);
+	return $render -> renderPage();
+}
+
+/** Загрузка заданий по уроку */
+function load_tasks()
+{
+	$input = $GLOBALS['input'];
+	$id_lesson = isset($input['subj']) ? $input['subj'] : "";
+	$query = "Select t.id_lesson, t.id_task, t.name as task_name, c.name, l.description, t.tex_min, l.name as lesson_name From task as t
+		Inner Join lessons as l On l.id_lesson = t.id_lesson
+		Inner Join category as c On c.id_category = t.id_category
+		Where t.id_lesson=$id_lesson Order by t.id_task";
+	$context = LoadDataFromDB($query);
+
+
+	$html = '<div class="box box-solid">';
+	$html .= '<div class="box-header with-border">';
+	$html .= '<h3 class="box-title">'.$context['data'][0]['description'].'</h3>';
+	$html .= '<div class="box-tools">';
+	$html .=  '<button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>';
+	$html .= '</button>';
+	$html .= '</div>';
+	$html .= '</div>';
+	$html .= '<div class="box-body no-padding">';
+	if (isset($context['data'][0]['id_task']))
+	{
+		$html .= '<ul class="nav nav-pills nav-stacked">';
+			for ($i=0; $i<count($context['data']); $i++)
+			{
+				$html .= '<li class="active"><a href="?act=code&task='.$context['data'][$i]['id_task'].'"><i class="fa fa-circle"></i>';
+				$html .=  $context['data'][$i]['tex_min'].' ['.$context['data'][$i]['name'].']</a></li>';
+			}
+		$html .= '</ul>';
+	}
+	$html .= '</div>';
+	$html .= '</div>';
+
+	echo $html;
 }
 
 function loadBase()
 {
-    $input = $GLOBALS['input'];
+	if (!isset($_SESSION['login']))
+    {
+        $render = new Render("service_files/please_login.php");
+        return $render -> renderPage();
+    }
+	$input = $GLOBALS['input'];
+	$task_id = isset($input['task']) ? $input['task'] : "";
+	$query = "Select tex_min, text, name, id_task From task";
+	$context['bd'] = LoadDataFromDB($query);
 	$context['code'] = file_get_contents("data/code_templates/cyclic_rotation/c/org_snippet");
-	$context['task_name'] = $input['task_name'];
     $render = new Render("templates/main.php", $context);
     return $render -> renderPage();
 }
@@ -24,6 +70,7 @@ function change_lang()
 {
 	$input = $GLOBALS['input'];
 	$lang = isset($input['lang']) ? $input['lang'] : "";
+
 	switch($lang)
 	{
 		case "c":
@@ -35,9 +82,8 @@ function change_lang()
 		default:
 			$code = file_get_contents("data/code_templates/cyclic_rotation/c/org_snippet");
 			break;
-		
-		echo $org_snippet;
 	}
+	echo $code;
 }
 
 function login()
@@ -212,20 +258,6 @@ function clean_file($filename)
 	}
 }
 
-//подгрузить задания по выбранной тематике в правую часть
-function load_selected_subject()
-{
-    $div_body = "
-    <h1>Iterations</h1>
-    <h3>Задачи:</h3>
-    <ul>
-        <li><a href='?act=code&task_name=cyclic_rotation'>Задача 1</a></li>
-        <li>Задача 2</li>
-    </il>
-    ";
-    echo $div_body;
-}
-
 // войти
 function do_login()
 {
@@ -244,7 +276,7 @@ function do_login()
             $role = $context["data"][0]["role"];
             $id = $context["data"][0]["id"];
             session_variables_create($login, $role, $id);
-            LoadBase();
+            loadStart();
         }
         else 
         {

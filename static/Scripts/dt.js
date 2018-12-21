@@ -2,27 +2,26 @@ $(document).ready(function(){
   //получаем subj выделенного элемента списка
   var subj = $("#list [class = active]").attr('subj');
   do_ajax(subj);
-  
 
-  $('#list li').on('click', function(envent){
-    event.preventDefault();
-    $('#list li').removeClass("active");
-    $(this).toggleClass("active");
+  $("#list li").on('click',function(event){
+      event.preventDefault();
+      $('#list li').removeClass("active");
+      $(this).toggleClass("active");
     
-    var subj = $(this).attr('subj');
-    do_ajax(subj);
-  })
+      var subj = $(this).attr('subj');
+      do_ajax(subj);
+  });
 
   function do_ajax(subj)
   {
-    $.ajax({
-      url: "",
-      type: "POST",
-      data: {'act': "select_subject", 'subj': subj},
-      cache: false
-    }).done(function(msg){
-      $('#right_part').html(msg);
-    });
+      $.ajax({
+          url: "",
+          type: "POST",
+          data: {'act': "select_subject", 'subj': subj},
+          cache: false
+        }).done(function(msg){
+            $('#right_part').html(msg);
+        });
   }
 
   $('#apply, #run').on('click', function(e){
@@ -39,7 +38,7 @@ $(document).ready(function(){
     }).done(function(msg){
       alert(msg);
     });
-  })
+  });
 
   /** РЕГИСТРАЦИЯ */
     $('#do_reg').click(function(event){
@@ -108,24 +107,26 @@ $(document).ready(function(){
       }
     });
     /** РЕГИСТРАЦИЯ КОНЕЦ */
-	
-	 $('#lang').on('change', function()
-      {
-          var lang = $(this).val();
-		  if (lang == "c")
-			ceditor.setoption("mode", "text/x-csrc");
-          if (lang == "sharp")
-			ceditor.setoption("mode", "text/x-csharp");
-		   //подгружаем файл сниппета
-		   $.ajax({
+    
+    /** МЕНЯЕМ ЯЗЫК И ПОДКЛЮЧАЕМ НУЖНЫЙ СНИППЕТ */
+    $('#lang').on('change', function()
+    {
+        var lang = $(this).val();
+        if (lang == "c")
+            cEditor.setOption("mode", "text/x-csrc");
+        if (lang == "sharp")
+            cEditor.setOption("mode", "text/x-csharp");
+        // подгружаем файл сниппета
+        $.ajax({
             url: "",
-               type: "POST",
-               data: {'act': 'change_lang', 'lang': lang},
-               cache: false
-           }).done(function(answ){
-			   cEditor.setValue(answ);
-           })
-      });
+            type: "POST",
+            data: {'act': 'change_lang', 'lang': lang},
+            cache: false
+        }).done(function(answ){
+            cEditor.setValue(answ);
+        })
+    });
+    /** КОНЕЦ МЕНЯЕМ ЯЗЫК И ПОДКЛЮЧАЕМ НУЖНЫЙ СНИППЕТ */
 
   /** CODEMIRROR */
     var cEditor = CodeMirror.fromTextArea(document.getElementById("c-code"), {
@@ -143,15 +144,7 @@ $(document).ready(function(){
           if (mod == 0)
             cEditor.setOption("keyMap", "default");
           if (mod == 1)
-          {
-            if (confirm("Переходя в режим vim вы тем самым подтверждаете свою неадекватность!"))
-            {
-                alert('notepad++ forever!!!');
-                cEditor.setOption("keyMap", "vim");
-            }
-            else
-                alert('Вот и славно!)');
-          }
+            cEditor.setOption("keyMap", "vim");           
       });
 
       var commandDisplay = document.getElementById('command-display');

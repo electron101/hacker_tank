@@ -1,4 +1,5 @@
 <?php
+ini_set('display_errors', 1);
 session_start();
 /*
 Объявляем глобальные переменные, если они нужны
@@ -15,5 +16,7 @@ include ("classes/render/render.php");
 include ("classes/mysqli/MySqlConnection.php");
 require_once("bdConnect.php");
 include ("functions.php");
+// include("route.php");
+// route :: start();
 include ("routing.php");
 ?>
