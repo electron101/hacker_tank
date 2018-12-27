@@ -4,6 +4,38 @@
 include ("classes/ssa/moldmaker.php");
 
 /** Основные функции */
+function copydirect($source, $dest, $over=false)
+{
+    if(!is_dir($dest))
+        mkdir($dest);
+    if($handle = opendir($source))
+    {
+        while(false !== ($file = readdir($handle)))
+        {
+            if($file != '.' && $file != '..')
+            {
+                $path = $source . '/' . $file;
+                if(is_file($path))
+                {
+                    if(!is_file($dest . '/' . $file || $over))
+                        if(!@copy($path, $dest . '/' . $file))
+                        {
+                            echo "('.$path.') Ошибка!!! ";
+                        }
+                }
+                elseif(is_dir($path))
+                {
+                    if(!is_dir($dest . '/' . $file))
+                        mkdir($dest . '/' . $file);
+                    copydirect($path, $dest . '/' . $file, $over);
+                }
+            }
+        }
+        closedir($handle);
+    }
+}
+
+
 function loadStart()
 {
 	$query = "Select * From lessons order by id_lesson";
@@ -38,7 +70,7 @@ function load_tasks()
 		$html .= '<ul class="nav nav-pills nav-stacked">';
 			for ($i=0; $i<count($context['data']); $i++)
 			{
-				$html .= '<li class="active"><a href="?act=code&task='.$context['data'][$i]['id_task'].'"><i class="fa fa-circle"></i>';
+				$html .= '<li class="active"><a href="?act=code&task='.$context['data'][$i]['id_task'].'&task_name='.$context['data'][$i]['task_name'].'"><i class="fa fa-circle"></i>';
 				$html .=  $context['data'][$i]['tex_min'].' ['.$context['data'][$i]['name'].']</a></li>';
 			}
 		$html .= '</ul>';
@@ -57,6 +89,9 @@ function loadBase()
         return $render -> renderPage();
     }
 	$input = $GLOBALS['input'];
+	$task_name = isset($input['task_name']) ? $input['task_name'] : "";
+	/*Корпирование директории*/
+	copydirect("data/code_templates/".$task_name, "data/users/".$_SESSION['login']."/".$task_name, 1);
 	$task_id = isset($input['task']) ? $input['task'] : "";
 	$query = "Select tex_min, text, name, id_task From task";
 	$context['bd'] = LoadDataFromDB($query);
@@ -330,7 +365,7 @@ function do_reg()
     }
 
     $query = "Insert Into polzov (name, pas, role) VALUES (?,?,?)";
-    $params = array($login, $pass, 1); //1-обычный пользак
+    $params = array($login, sha1($pass), 1); //1-обычный пользак
     $types = "ssi";
 
     $res = bd_interaction($query, $params, $types);

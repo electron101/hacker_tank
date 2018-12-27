@@ -13,7 +13,7 @@
 
 $DATABASES = [
 	"MySql" => [
-		"NAME" => "cod",
+		"NAME" => "hacker_tank",
 		"HOST" => "localhost",
 		"USER" => "root",
 		"PASSWORD" => "",
