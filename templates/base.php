@@ -5,7 +5,7 @@
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<title>New Codility</title>
 		<meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
-		
+		<base href="http://localhost/hacker_tank/" />
 		<link rel="stylesheet" href="static/AdminLTE/bower_components/bootstrap/dist/css/bootstrap.min.css">
 		<link rel="stylesheet" href="static/AdminLTE/bower_components/font-awesome/css/font-awesome.min.css">
 		<link rel="stylesheet" href="static/AdminLTE/bower_components/Ionicons/css/ionicons.min.css">
