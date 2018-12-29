@@ -3,20 +3,16 @@ ini_set('display_errors', 1);
 session_start();
 /*
 Объявляем глобальные переменные, если они нужны
-Последовательно подключаем файл настроек, файл рендеринга страниц,
-файл для соединения с бд,
-файл с функциями, файл маршрутизации
+Последовательно подключаем файл настроек, файл функций и
+файл обработчика
 */
-
 if (isset($_POST) || isset($_GET)) $input = array_merge($_GET, $_POST);
-
-/** Основные файлы */
-include ("settings.php");
-include ("classes/render/render.php");
-include ("classes/mysqli/MySqlConnection.php");
-require_once("bdConnect.php");
-include ("functions.php");
-// include("route.php");
-// route :: start();
-include ("routing.php");
+/** Настройки */
+include_once ("settings.php");
+/** Функции */
+include_once ("functions.php");
+/** Обработчик */
+include_once ("classes/ssa/handler.php");
+Handler :: init();
+include_once ("routing.php");
 ?>

@@ -1,41 +1,25 @@
 <?php
-
+/** Класс отрисовки страниц */
+include ("classes/render/render.php");
+/** класс работы с базой mysql */
+include ("classes/mysqli/MySqlConnection.php");
+/** Подключение к бд */
+require_once("classes/ssa/ConnectDb.php");
 /** Генератор форм */
 include ("classes/ssa/moldmaker.php");
 
-/** Основные функции */
-function copydirect($source, $dest, $over=false)
+/** Экземпляр класса подключения */
+$ConDB = new ConnectDB();
+
+/** Тестовая функция */
+function load_test()
 {
-    if(!is_dir($dest))
-        mkdir($dest);
-    if($handle = opendir($source))
-    {
-        while(false !== ($file = readdir($handle)))
-        {
-            if($file != '.' && $file != '..')
-            {
-                $path = $source . '/' . $file;
-                if(is_file($path))
-                {
-                    if(!is_file($dest . '/' . $file || $over))
-                        if(!@copy($path, $dest . '/' . $file))
-                        {
-                            echo "('.$path.') Ошибка!!! ";
-                        }
-                }
-                elseif(is_dir($path))
-                {
-                    if(!is_dir($dest . '/' . $file))
-                        mkdir($dest . '/' . $file);
-                    copydirect($path, $dest . '/' . $file, $over);
-                }
-            }
-        }
-        closedir($handle);
-    }
+	$context = 1;
+	$render = new Render("templates/test_page.php", $context);
+	return $render -> renderPage();
 }
 
-
+/** Основные функции */
 function loadStart()
 {
 	$query = "Select * From lessons order by id_lesson";
@@ -54,7 +38,6 @@ function load_tasks()
 		Inner Join category as c On c.id_category = t.id_category
 		Where t.id_lesson=$id_lesson Order by t.id_task";
 	$context = LoadDataFromDB($query);
-
 
 	$html = '<div class="box box-solid">';
 	$html .= '<div class="box-header with-border">';
@@ -485,14 +468,47 @@ return $render -> renderPage();
 
 }
 
+/** КОПИРОВАНИЕ ДИРЕКТОРИЙ */
+function copydirect($source, $dest, $over=false)
+{
+    if(!is_dir($dest))
+        mkdir($dest);
+    if($handle = opendir($source))
+    {
+        while(false !== ($file = readdir($handle)))
+        {
+            if($file != '.' && $file != '..')
+            {
+                $path = $source . '/' . $file;
+                if(is_file($path))
+                {
+                    if(!is_file($dest . '/' . $file || $over))
+                        if(!@copy($path, $dest . '/' . $file))
+                        {
+                            echo "('.$path.') Ошибка!!! ";
+                        }
+                }
+                elseif(is_dir($path))
+                {
+                    if(!is_dir($dest . '/' . $file))
+                        mkdir($dest . '/' . $file);
+                    copydirect($path, $dest . '/' . $file, $over);
+                }
+            }
+        }
+        closedir($handle);
+    }
+}
+
+
 /** ОПЕРАЦИИ С БД */
 // выборка из бд
 function LoadDataFromDB($query)
 {
     if ($query == "")
-        return;
-    
-    $CONN = $GLOBALS["CONN"];
+		return;
+		
+	$CONN = $GLOBALS["ConDB"] -> connect();
     $mySqlCommand = new MySQLCommand($CONN, $query);
     $context = $mySqlCommand -> requestExecute();
     
@@ -502,7 +518,7 @@ function LoadDataFromDB($query)
 /** Вставка, удаление, обновление */
 function bd_interaction($query, $params, $types)
 {
-    $CONN = $GLOBALS["CONN"];
+	$CONN = $GLOBALS["ConDB"] -> connect();
 	$mySqlCommand = new MySQLCommand($CONN, $query, "non_query", $params, $types);
     $cmd = $mySqlCommand -> requestExecute();
     

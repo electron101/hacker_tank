@@ -1,4 +1,10 @@
 $(document).ready(function(){
+
+    /** Отменяем стандартное действие при нажатии на ссылку */
+	$("#link").on('click', function(e){
+        e.preventDefault();
+    })	
+
   //получаем subj выделенного элемента списка
   var subj = $("#list [class = active]").attr('subj');
   do_ajax(subj);

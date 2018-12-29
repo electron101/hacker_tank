@@ -18,6 +18,9 @@ $act = isset($input['act']) ? $input['act'] : "";
 	
 switch($act)
 {
+	case "Test":
+		load_test();
+		break;
 	case "get_results":
 		get_result();
 		break;

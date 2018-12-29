@@ -16,14 +16,12 @@
 		<link rel="stylesheet" href="static/AdminLTE/bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css">
 		<link rel="stylesheet" href="static/AdminLTE/dist/css/skins/_all-skins.min.css">
 		<link rel="stylesheet" href="static/AdminLTE/plugins/iCheck/square/blue.css">
-
 		<!-- codemirror -->
 		<link rel="stylesheet" href="static/codemirror/doc/docs.css">
 		<link rel="stylesheet" href="static/codemirror/lib/codemirror.css">
 		<link rel="stylesheet" href="static/codemirror/addon/hint/show-hint.css">
 		<link rel="stylesheet" href="static/codemirror/theme/darcula.css">
 		<link rel="stylesheet" href="static/codemirror/theme/dracula.css">
-
 		<!-- собственные стили -->
 		<link rel="stylesheet" href="static/css/mycss.css">
 	</head>
@@ -39,29 +37,16 @@
 						<?php if (isset($_SESSION['login'])): ?>
 							<ul class="nav navbar-nav">
 								<li class="dropdown user user-menu">
-            						<a href="#" class="dropdown-toggle" data-toggle="dropdown">
-										<img src="static/img/test_avatar.jpg" class="user-image" alt="User Image">
-              							<span class="hidden-xs"><?=$_SESSION['login']?></span>
+            						<a href="?act=logout" class="dropdown-toggle">
+              							<span class="hidden-xs">[<?=$_SESSION['login']?>] Выйти</span>
             						</a>
-            						<ul class="dropdown-menu">
-              							<li class="user-footer">
-										  <?php if($_SESSION['role'] == 0): ?>
-	                						<div class="pull-left">
-                  								<a href="?act=lk" class="btn btn-default btn-flat">Личный кабинет</a>												
-                							</div>
-										  <?php endif; ?>
-                							<div class="pull-right">
-	                  							<a href="?act=logout" class="btn btn-default btn-flat">Выйти</a>
-                							</div>
-              							</li>
-            						</ul>
           						</li>
 							</ul>
 							<?php else: ?>
 							<ul class="nav navbar-nav">
 								<li class="dropdown user user-menu">
             						<a href="?act=login">
-              							<span class="hidden-xs">Войти</span>
+              							<span class="hidden-xs">Вход</span>
             						</a>
           						</li>
 							</ul>
@@ -102,7 +87,6 @@
 		<script src="static/AdminLTE/bower_components/select2/dist/js/select2.full.min.js"></script>
 		<script src="static/AdminLTE/plugins/iCheck/icheck.min.js"></script>
 		<script src="static/AdminLTE/bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
-
 		<!-- codemirror -->
 		<script src="static/codemirror/lib/codemirror.js"></script>
   		<script src="static/codemirror/addon/hint/show-hint.js"></script>
@@ -114,7 +98,6 @@
   		<script src="static/codemirror/mode/htmlmixed/htmlmixed.js"></script>
 		<script src="static/codemirror/mode/clike/clike.js"></script>
 		<script src="static/codemirror/keymap/vim.js"></script>
-
 		<script src="static/Scripts/dt.js"></script>
 	</body>
 </html>

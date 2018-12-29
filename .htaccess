@@ -1,4 +1,4 @@
-RewriteBase /
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule .* index.php
+Options +FollowSymLinks
+RewriteEngine On
+
+RewriteRule ^Test/([a-z]) /index.php?act=Test&id=$1
