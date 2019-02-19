@@ -14,14 +14,12 @@ class Router
         /** Переменные */
         $variables = $routes;
 
-        echo '<script>alert("it works!");</script>';
-
-        // switch($action)
-        // {
-        //     case "Test":
-        //         load_test($variables);
-        //         break;
-        // }
+        switch($action)
+        {
+            case "Test":
+                load_test($variables);
+                break;
+        }
     }
 }
 ?>

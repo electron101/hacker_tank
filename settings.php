@@ -21,6 +21,11 @@ $DATABASES = [
 	]
 ];
 
+
+
 //Базовый файл шаблона
 $BASE_FILE = 'base.php';
 ?>
+
+<!-- Базовая директория -->
+<base href="http://localhost/hacker_tank/"/>

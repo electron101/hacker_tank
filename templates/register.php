@@ -1,7 +1,7 @@
 <!-- регистрация -->
 <div class="register-box">
   <div class="register-logo">
-    <a href="?act=base"><b>New </b>Codility</a>
+    <a href="?act=base"><b>Hacker </b>Tank</a>
   </div>
   <div class="register-box-body">
     <p class="login-box-msg">Регистрация</p>

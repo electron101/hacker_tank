@@ -1,7 +1,7 @@
 <!-- Вход/регистрация -->
 <div class="login-box">
   <div class="login-logo">
-    <a href="?act=base"><b>New </b>Codility</a>
+    <a href="?act=base"><b>Hacker</b>Tank</a>
   </div>
   <!-- /.login-logo -->
   <div class="login-box-body">

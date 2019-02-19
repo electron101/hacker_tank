@@ -46,6 +46,6 @@
         </div>
         <div class="col-xs-9" id="right_part">
         </div>
-        <a href="Test/aa">Тестовая ссылка</a>
+        <!-- <a href="Test/aa">Тестовая ссылка</a> -->
     </div>
 </div>
