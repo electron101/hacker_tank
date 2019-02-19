@@ -1,51 +1,63 @@
 <!-- Стартовая страница -->
 <div class="row">
     <div class="col-xs-12">
-        <div class="col-xs-3" id="list">
-            <div class="box box-solid">
-                <div class="box-header with-border">
-                    <h3 class="box-title">Доступные задания</h3>
-                    <div class="box-tools">
-                        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
-                        </button>
+        <div class="box">
+            <div class="box-body">
+                <div class="box box-solid">
+                    <div class="box-header with-border">
+                        <h3 class="box-title"><?=$context['data'][0]['description']?></h3>
                     </div>
-                </div>
-                <div class="box-body no-padding">
-                    <?php if (count($context['data']) > 0): ?>
-                        <ul class="nav nav-pills nav-stacked">
+                    <div class="box-body no-padding">
+                        <table class="table table-condensed" id="task_list">
+                            <tr>
+                                <th style="width: 2px"></th>
+                                <th>Задача</th>
+                                <th>Уровень</th>
+                                <th>Результат</th>
+                                <th></th>
+                            </tr>
                             <?php for ($i=0; $i<count($context['data']); $i++): ?>
-                                <?php if ($i == 0): ?>
-                                    <li class="active" subj="<?=$context['data'][$i]['id_lesson']?>"><a href="" id="no_click"><i class="fa fa-circle"></i> 
-                                        <?=$context['data'][$i]['description']?></a></li>
-                                <?php else: ?>
-                                    <li subj="<?=$context['data'][$i]['id_lesson']?>"><a href="" id="no_click"><i class="fa fa-circle"></i> 
-                                        <?=$context['data'][$i]['description']?></a></li>
-                                <?php endif; ?>
+                            <tr>
+                                <td <?php switch ($context['data'][$i]['id_category'])
+                                {
+                                    case 1:
+                                        echo 'style="background-color: green;"';
+                                }
+                                ?>></td>
+                                <td>
+                                    <?=$context['data'][$i]['rus_name']?>
+                                    <br>
+                                    <small style="color: grey;"><?=$context['data'][$i]['tex_min']?></small>
+                                </td>
+                                <td><?=$context['data'][$i]['name']?></td>
+                                <td><span class="badge bg-red">0%</span></td>
+                                <td>
+                                    <a href="" class="btn btn-block btn-default btn-xs">Просмотр</a>
+                                    <a href="" class="btn btn-block btn-primary btn-xs">Старт</a>
+                                </td>
+                            </tr>
                             <?php endfor; ?>
-                        </ul>
-                    <?php endif; ?>
-                </div>
-            </div>
-            <?php if (isset($_SESSION['id']) && $_SESSION['role'] == 0): ?>
-            <div class="box box-solid">
-                <div class="box-header with-border">
-                    <h3 class="box-title">Администрирование</h3>
-                    <div class="box-tools">
-                        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
-                        </button>
+                        </table>
                     </div>
                 </div>
-                <div class="box-body no-padding">
-                    <ul class="nav nav-pills nav-stacked"> 
-                        <li><a href="" id=""><i class="fa fa-circle"></i>Тесты</a></li>
-                        <li><a href="" id="no_click"><i class="fa fa-circle"></i>Пользователи</a></li>
-                    </ul>
-                </div>
             </div>
-            <?php endif; ?>
         </div>
-        <div class="col-xs-9" id="right_part">
-        </div>
-        <!-- <a href="Test/aa">Тестовая ссылка</a> -->
     </div>
 </div>
+                    <!-- <div class="box-body no-padding">
+  	if (isset($context['data'][0]['id_task']))
+  	{
+  		 <ul class="nav nav-pills nav-stacked">
+  			for ($i=0; $i<count($context['data']); $i++)
+  			{
+  				 <li class="active"><a href="?act=code&task='.$context['data'][$i]['id_task'].'&task_name='.$context['data'][$i]['task_name'].'"><i class="fa fa-circle"></i>';
+  				$html .=  $context['data'][$i]['tex_min'].' ['.$context['data'][$i]['name'].']</a></li>
+  			}
+  		 </ul>
+  	}
+  	 </div>
+  	 </div>
+            </div>
+        </div>
+    </div>
+</div> -->

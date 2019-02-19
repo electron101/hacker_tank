@@ -8,6 +8,13 @@ require_once("classes/ssa/ConnectDb.php");
 /** Генератор форм */
 include ("classes/ssa/moldmaker.php");
 
+/** Глобальные переменные */
+$str = "Select t.id_lesson, t.id_task, t.name as task_name, c.name, l.description, t.tex_min, l.name as lesson_name,
+			t.rus_name, t.id_category
+			From task as t
+			Inner Join lessons as l On l.id_lesson = t.id_lesson
+			Inner Join category as c On c.id_category = t.id_category";
+
 /** Экземпляр класса подключения */
 $ConDB = new ConnectDB();
 
@@ -19,49 +26,34 @@ function load_test()
 	return $render -> renderPage();
 }
 
-/** Основные функции */
-function loadStart()
+function load_task_list_for_navbar()
 {
 	$query = "Select * From lessons order by id_lesson";
+	$context = LoadDataFromDB($query);
+	return $context;
+}
+
+/** Основные функции */
+
+//Стартовая страница
+function loadStart($str)
+{
+	$query = $str." Where t.id_lesson = (Select id_lesson From lessons order by id_lesson Limit 1)
+		Order By t.id_task";
 	$context = LoadDataFromDB($query);
     $render = new Render("templates/start_page.php", $context);
 	return $render -> renderPage();
 }
 
 /** Загрузка заданий по уроку */
-function load_tasks()
+function load_task_list_to_main_content($str)
 {
 	$input = $GLOBALS['input'];
-	$id_lesson = isset($input['subj']) ? $input['subj'] : "";
-	$query = "Select t.id_lesson, t.id_task, t.name as task_name, c.name, l.description, t.tex_min, l.name as lesson_name From task as t
-		Inner Join lessons as l On l.id_lesson = t.id_lesson
-		Inner Join category as c On c.id_category = t.id_category
-		Where t.id_lesson=$id_lesson Order by t.id_task";
+	$id_lesson = isset($input['id']) ? $input['id'] : "";
+	$query =  $str." Where t.id_lesson=$id_lesson Order by t.id_task";
 	$context = LoadDataFromDB($query);
-
-	$html = '<div class="box box-solid">';
-	$html .= '<div class="box-header with-border">';
-	$html .= '<h3 class="box-title">'.$context['data'][0]['description'].'</h3>';
-	$html .= '<div class="box-tools">';
-	$html .=  '<button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>';
-	$html .= '</button>';
-	$html .= '</div>';
-	$html .= '</div>';
-	$html .= '<div class="box-body no-padding">';
-	if (isset($context['data'][0]['id_task']))
-	{
-		$html .= '<ul class="nav nav-pills nav-stacked">';
-			for ($i=0; $i<count($context['data']); $i++)
-			{
-				$html .= '<li class="active"><a href="?act=code&task='.$context['data'][$i]['id_task'].'&task_name='.$context['data'][$i]['task_name'].'"><i class="fa fa-circle"></i>';
-				$html .=  $context['data'][$i]['tex_min'].' ['.$context['data'][$i]['name'].']</a></li>';
-			}
-		$html .= '</ul>';
-	}
-	$html .= '</div>';
-	$html .= '</div>';
-
-	echo $html;
+	$render = new Render("templates/start_page.php", $context);
+	return $render -> renderPage();
 }
 
 function loadBase()
@@ -391,7 +383,7 @@ function logout()
     unset($_SESSION['role']);
     unset($_SESSION['id']);
     session_destroy();
-    loadBase();
+    loadStart();
 }
 
 //Ф-ция в которую будут получены результаты

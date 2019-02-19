@@ -9,14 +9,14 @@
 		background-color: #C8CDDB;
 }
 
-#offices_table td
+#task_list td
 {
-	font-size: 12px;
+	font-size: 14px;
 }
 
-#users_table th
+#task_list th
 {
-	font-size: 12px;
+	font-size: 14px;
 }
 
 .CodeMirror {

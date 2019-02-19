@@ -38,9 +38,9 @@ switch($act)
 	case "do_reg":
 		do_reg();
 		break;
-	// загрузить задачи в правую часть листаs
-	case "select_subject":
-		load_tasks();
+	// загрузить задачи в правую часть листа
+	case "sel_task":
+		load_task_list_to_main_content($str);
 		break;
 	case "do_login":
 		do_login();
@@ -54,11 +54,8 @@ switch($act)
 	case "change_lang":
 		change_lang();
 		break;
-	case "arrays":
-		loadStart();
-		break;
 	default:
-		loadStart();
+		loadStart($str);
 		break;
 }
 ?>
