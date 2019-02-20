@@ -54,6 +54,9 @@ switch($act)
 	case "change_lang":
 		change_lang();
 		break;
+	case "load_start":
+		loadStart($str);
+		break;
 	default:
 		loadStart($str);
 		break;

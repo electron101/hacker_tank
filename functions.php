@@ -1,12 +1,13 @@
 <?php
+
 /** Класс отрисовки страниц */
-include ("classes/render/render.php");
+include("classes/render/render.php");
 /** класс работы с базой mysql */
-include ("classes/mysqli/MySqlConnection.php");
+include("classes/mysqli/MySqlConnection.php");
 /** Подключение к бд */
 require_once("classes/ssa/ConnectDb.php");
 /** Генератор форм */
-include ("classes/ssa/moldmaker.php");
+include("classes/ssa/moldmaker.php");
 
 /** Глобальные переменные */
 $str = "Select t.id_lesson, t.id_task, t.name as task_name, c.name, l.description, t.tex_min, l.name as lesson_name,
@@ -18,13 +19,7 @@ $str = "Select t.id_lesson, t.id_task, t.name as task_name, c.name, l.descriptio
 /** Экземпляр класса подключения */
 $ConDB = new ConnectDB();
 
-/** Тестовая функция */
-function load_test()
-{
-	$context = 1;
-	$render = new Render("templates/test_page.php", $context);
-	return $render -> renderPage();
-}
+/** Основные функции */
 
 function load_task_list_for_navbar()
 {
@@ -33,16 +28,14 @@ function load_task_list_for_navbar()
 	return $context;
 }
 
-/** Основные функции */
-
 //Стартовая страница
 function loadStart($str)
 {
-	$query = $str." Where t.id_lesson = (Select id_lesson From lessons order by id_lesson Limit 1)
+	$query = $str . " Where t.id_lesson = (Select id_lesson From lessons order by id_lesson Limit 1)
 		Order By t.id_task";
 	$context = LoadDataFromDB($query);
-    $render = new Render("templates/start_page.php", $context);
-	return $render -> renderPage();
+	$render = new Render("templates/start_page.php", $context);
+	return $render->renderPage();
 }
 
 /** Загрузка заданий по уроку */
@@ -50,29 +43,33 @@ function load_task_list_to_main_content($str)
 {
 	$input = $GLOBALS['input'];
 	$id_lesson = isset($input['id']) ? $input['id'] : "";
-	$query =  $str." Where t.id_lesson=$id_lesson Order by t.id_task";
+	$query = $str . " Where t.id_lesson=$id_lesson Order by t.id_task";
 	$context = LoadDataFromDB($query);
 	$render = new Render("templates/start_page.php", $context);
-	return $render -> renderPage();
+	return $render->renderPage();
 }
 
 function loadBase()
 {
-	if (!isset($_SESSION['login']))
-    {
-        $render = new Render("service_files/please_login.php");
-        return $render -> renderPage();
-    }
+	if (!isset($_SESSION['login'])) {
+		$render = new Render("service_files/please_login.php");
+		return $render->renderPage();
+	}
 	$input = $GLOBALS['input'];
 	$task_name = isset($input['task_name']) ? $input['task_name'] : "";
+	
 	/*Корпирование директории*/
-	copydirect("data/code_templates/".$task_name, "data/users/".$_SESSION['login']."/".$task_name, 1);
-	$task_id = isset($input['task']) ? $input['task'] : "";
-	$query = "Select tex_min, text, name, id_task From task";
+	$dir = "data/users/" . $_SESSION['login'] . "/" . $task_name;
+	copydirect("data/code_templates/" . $task_name, $dir, 1);
+
+	$query = "Select rus_name, tex_min, text, name, id_task From task";
 	$context['bd'] = LoadDataFromDB($query);
-	$context['code'] = file_get_contents("data/code_templates/cyclic_rotation/c/org_snippet");
-    $render = new Render("templates/main.php", $context);
-    return $render -> renderPage();
+
+	$snippet = "data/code_templates/" . $task_name . "/c/org_snippet";
+	if (file_exists($snippet))
+		$context['code'] = file_get_contents($snippet);
+	$render = new Render("templates/main.php", $context, "standalone"); 						//~standalone			
+	return $render->renderPage();
 }
 
 //смена языка
@@ -81,8 +78,7 @@ function change_lang()
 	$input = $GLOBALS['input'];
 	$lang = isset($input['lang']) ? $input['lang'] : "";
 
-	switch($lang)
-	{
+	switch ($lang) {
 		case "c":
 			$code = file_get_contents("data/code_templates/cyclic_rotation/c/org_snippet");
 			break;
@@ -98,26 +94,25 @@ function change_lang()
 
 function login()
 {
-    $render = new Render("templates/login.php");
-    return $render -> renderPage();
+	$render = new Render("templates/login.php");
+	return $render->renderPage();
 }
 
 function compile_this()
 {
-    $input = $GLOBALS['input'];
-    $val       = isset($input['val']) ? $input['val'] : "";
-    $code      = isset($input['code']) ? $input['code'] : "";
-    $lang      = isset($input['lang']) ? $input['lang'] : "";
-    $task_name = isset($input['task_name']) ? $input['task_name'] : "";
+	$input = $GLOBALS['input'];
+	$val = isset($input['val']) ? $input['val'] : "";
+	$code = isset($input['code']) ? $input['code'] : "";
+	$lang = isset($input['lang']) ? $input['lang'] : "";
+	$task_name = isset($input['task_name']) ? $input['task_name'] : "";
 
-	$root_path = "data/users/".$_SESSION['login']."/".$task_name."/".$lang."/";
-	switch ($val) 
-	{
-		case "example" :
-			compile_example_test($code ,$lang, $task_name, $root_path);
+	$root_path = "data/users/" . $_SESSION['login'] . "/" . $task_name . "/" . $lang . "/";
+	switch ($val) {
+		case "example":
+			compile_example_test($code, $lang, $task_name, $root_path);
 			break;
 
-		case "extend" :
+		case "extend":
 			compile_extend_test($code, $lang, $task_name, $root_path);
 			break;
 	}
@@ -125,65 +120,59 @@ function compile_this()
 
 function compile_example_test($code, $lang, $task_name, $root_path)
 {
-	if ($lang == "c")
-	{
+	if ($lang == "c") {
 		// $ext = "c";
 		// $tail_test_example = '_test_example.'.$lang;
-		$file_examle_test = $root_path.$task_name.'_test_example.c';
-		
-		clean_file($root_path.'done_code.c');
-		file_put_contents($root_path.'done_code.c', file_get_contents($file_examle_test).$code);
+		$file_examle_test = $root_path . $task_name . '_test_example.c';
+
+		clean_file($root_path . 'done_code.c');
+		file_put_contents($root_path . 'done_code.c', file_get_contents($file_examle_test) . $code);
 		
 		// gcc cyclic_rotation_test_example.c general.c -lm -o example
-		clean_file($root_path.'done_test.out');
-		$output = passthru("sh -c 'gcc ".$root_path."done_code.c ".$root_path."general.c -lm -o ".$root_path."done_test.out 2>&1'", $ret_val);
+		clean_file($root_path . 'done_test.out');
+		$output = passthru("sh -c 'gcc " . $root_path . "done_code.c " . $root_path . "general.c -lm -o " . $root_path . "done_test.out 2>&1'", $ret_val);
 		
 		// return $result_array = ['ret_val' => $ret_val, 'out_to_console' => $out_to_console];
 		
 		/* не удачная компиляция */
-		if ($ret_val == 1) 
-		{
+		if ($ret_val == 1) {
 			// return $result_array = ['ret_val' => $ret_val, 'out_to_console' => $out_to_console];
 			echo "Ошибка компиляции\n\n";
 			echo $output;
 			exit();
 		}
 		/* удачная компиляция */
-		if ($ret_val == 0) 
-		{
+		if ($ret_val == 0) {
 			echo "Успешная компиляция\n\n";
 
-			$output = passthru("sh -c '".$root_path."./done_test.out'", $ret_val);
+			$output = passthru("sh -c '" . $root_path . "./done_test.out'", $ret_val);
 			echo $output;
 			exit();
 		}
 	}
 
-	if ($lang == "sharp")
-	{
+	if ($lang == "sharp") {
 		// mcs -out:done_test.out cyclic_rotation_test_example.cs cyclic_rotation_test.cs general.cs
-		$file_examle_test = $root_path.$task_name.'_test_example.cs';
+		$file_examle_test = $root_path . $task_name . '_test_example.cs';
 
-		clean_file($root_path.'done_code.cs');
-		file_put_contents($root_path.'done_code.cs', file_get_contents($file_examle_test).$code);
+		clean_file($root_path . 'done_code.cs');
+		file_put_contents($root_path . 'done_code.cs', file_get_contents($file_examle_test) . $code);
 
-		clean_file($root_path.'done_test.out');
-		$output = passthru("sh -c 'mcs -out:".$root_path."done_test.out ".$root_path."done_code.cs ".$root_path.$task_name."_test.cs ".$root_path."general.cs  2>&1'", $ret_val);
+		clean_file($root_path . 'done_test.out');
+		$output = passthru("sh -c 'mcs -out:" . $root_path . "done_test.out " . $root_path . "done_code.cs " . $root_path . $task_name . "_test.cs " . $root_path . "general.cs  2>&1'", $ret_val);
 		
 		/* не удачная компиляция */
-		if ($ret_val == 1) 
-		{
+		if ($ret_val == 1) {
 			// return $result_array = ['ret_val' => $ret_val, 'out_to_console' => $out_to_console];
 			echo "Ошибка компиляции\n\n";
 			echo $output;
 			exit();
 		}
 		/* удачная компиляция */
-		if ($ret_val == 0) 
-		{
+		if ($ret_val == 0) {
 			echo "Успешная компиляция\n\n";
 
-			$output = passthru("sh -c 'mono ".$root_path."done_test.out'", $ret_val);
+			$output = passthru("sh -c 'mono " . $root_path . "done_test.out'", $ret_val);
 			echo $output;
 			exit();
 		}
@@ -193,204 +182,156 @@ function compile_example_test($code, $lang, $task_name, $root_path)
 
 function compile_extend_test($code, $lang, $task_name, $root_path)
 {
-	if ($lang == "c")
-	{
-		$file_extend_test = $root_path.$task_name.'_test_extend.c';
-		
-		clean_file($root_path.'done_code.c');
-		file_put_contents($root_path.'done_code.c', file_get_contents($file_extend_test).$code);
-		
-		clean_file($root_path.'done_test.out');
-		$output = passthru("sh -c 'gcc ".$root_path."done_code.c ".$root_path."general.c -lm -o ".$root_path."done_test.out 2>&1'", $ret_val);
+	if ($lang == "c") {
+		$file_extend_test = $root_path . $task_name . '_test_extend.c';
+
+		clean_file($root_path . 'done_code.c');
+		file_put_contents($root_path . 'done_code.c', file_get_contents($file_extend_test) . $code);
+
+		clean_file($root_path . 'done_test.out');
+		$output = passthru("sh -c 'gcc " . $root_path . "done_code.c " . $root_path . "general.c -lm -o " . $root_path . "done_test.out 2>&1'", $ret_val);
 		
 		// return $result_array = ['ret_val' => $ret_val, 'out_to_console' => $out_to_console];
 		
 		/* не удачная компиляция */
-		if ($ret_val == 1) 
-		{
+		if ($ret_val == 1) {
 			echo "error|";
 			echo $output;
 			exit();
 		}
 		/* удачная компиляция */
-		if ($ret_val == 0) 
-		{
-			$output = passthru("sh -c '".$root_path."./done_test.out'", $ret_val);
+		if ($ret_val == 0) {
+			$output = passthru("sh -c '" . $root_path . "./done_test.out'", $ret_val);
 			echo $output;
 			exit();
 		}
 	}
-	
-	if ($lang == "sharp")
-	{
+
+	if ($lang == "sharp") {
 		// mcs -out:done_test.out cyclic_rotation_test_example.cs cyclic_rotation_test.cs general.cs
-		$file_extend_test = $root_path.$task_name.'_test_extend.cs';
-		
-		clean_file($root_path.'done_code.cs');
-		file_put_contents($root_path.'done_code.cs', file_get_contents($file_extend_test).$code);
-		
-		clean_file($root_path.'done_test.out');
-		$output = passthru("sh -c 'mcs -out:".$root_path."done_test.out ".$root_path."done_code.cs ".$root_path.$task_name."_test.cs ".$root_path."general.cs  2>&1'", $ret_val);
+		$file_extend_test = $root_path . $task_name . '_test_extend.cs';
+
+		clean_file($root_path . 'done_code.cs');
+		file_put_contents($root_path . 'done_code.cs', file_get_contents($file_extend_test) . $code);
+
+		clean_file($root_path . 'done_test.out');
+		$output = passthru("sh -c 'mcs -out:" . $root_path . "done_test.out " . $root_path . "done_code.cs " . $root_path . $task_name . "_test.cs " . $root_path . "general.cs  2>&1'", $ret_val);
 		
 		/* не удачная компиляция */
-		if ($ret_val == 1) 
-		{
+		if ($ret_val == 1) {
 			echo "error|";
 			echo $output;
 			exit();
 		}
 		/* удачная компиляция */
-		if ($ret_val == 0) 
-		{
-			$output = passthru("sh -c 'mono ".$root_path."done_test.out'", $ret_val);
+		if ($ret_val == 0) {
+			$output = passthru("sh -c 'mono " . $root_path . "done_test.out'", $ret_val);
 			echo $output;
 			exit();
 		}
 	}
 
-}
-
-// удалить существующий файл
-function delete_file($filename)
-{
-	if (file_exists($filename))
-	{
-		unlink($filename);
-	}
-}
-
-// очистить существующий файл
-function clean_file($filename)
-{
-	if (file_exists($filename))
-	{
-		file_put_contents($filename, "");
-	}
 }
 
 // войти
 function do_login()
 {
-    $input = $GLOBALS["input"];
-    if (isset($input['login']) && isset($input['password']))
-    {
-        $login = $input['login'];
-        $password = $input['password'];
+	$input = $GLOBALS["input"];
+	if (isset($input['login']) && isset($input['password'])) {
+		$login = $input['login'];
+		$password = $input['password'];
 
-        $query = "Select id_polzov as id, u.name, u.role From polzov u Where u.name='$login'";
-        $context = LoadDataFromDB($query);
+		$query = "Select id_polzov as id, u.name, u.role From polzov u Where u.name='$login'";
+		$context = LoadDataFromDB($query);
 
-        if ($context["status"] == 1 && count($context["data"]) > 0)
-        {
-            $login = $context["data"][0]["name"];
-            $role = $context["data"][0]["role"];
-            $id = $context["data"][0]["id"];
-            session_variables_create($login, $role, $id);
-            loadStart();
-        }
-        else 
-        {
-            $render = new Render("service_files/user_not_found.php", $context);
-            return $render -> renderPage();
-        }
-    }
-    else return;
+		if ($context["status"] == 1 && count($context["data"]) > 0) {
+			$login = $context["data"][0]["name"];
+			$role = $context["data"][0]["role"];
+			$id = $context["data"][0]["id"];
+			session_variables_create($login, $role, $id);
+			loadStart($GLOBALS["str"]);
+		} else {
+			$render = new Render("service_files/user_not_found.php", $context);
+			return $render->renderPage();
+		}
+	} else return;
 }
 
 // регистрация
 function register()
 {
-    $render = new Render("templates/register.php");
-    return $render -> renderPage();
+	$render = new Render("templates/register.php");
+	return $render->renderPage();
 }
 
 // обработка данных регистрации
 function do_reg()
 {
-    $input = $GLOBALS["input"];
-    $str = isset($input['str']) ? $input['str'] : "";
-    $data = array();
-    foreach (explode('&', $str) as $val)
-    {
-        preg_match_all("#([^,\s]+)=([^\*]+)#s",$val,$out);
-        unset($out[0]);
-        $out = array_combine($out[1], $out[2]);
-        $data = array_merge($data, $out);
-    }
+	$input = $GLOBALS["input"];
+	$str = isset($input['str']) ? $input['str'] : "";
+	$data = array();
+	foreach (explode('&', $str) as $val) {
+		preg_match_all("#([^,\s]+)=([^\*]+)#s", $val, $out);
+		unset($out[0]);
+		$out = array_combine($out[1], $out[2]);
+		$data = array_merge($data, $out);
+	}
 
-    $login = isset($data['login']) ? $data['login'] : "";
-    $pass = isset($data['pass']) ? $data['pass'] : "";
-    $re_pass = isset($data['re_pass']) ? $data['re_pass'] : "";
+	$login = isset($data['login']) ? $data['login'] : "";
+	$pass = isset($data['pass']) ? $data['pass'] : "";
+	$re_pass = isset($data['re_pass']) ? $data['re_pass'] : "";
 
-    if ($pass != $re_pass)
-    {
-        echo 0;
-        exit;
-    }
+	if ($pass != $re_pass) {
+		echo 0;
+		exit;
+	}
 
-    $query = "Select count(id_polzov) as counter From polzov Where name = '$login'";
-    $context = LoadDataFromDB($query);
-    if ($context["status"] == 1)
-    {
-        if ($context["data"][0]["counter"] > 0)
-        {
-            echo 1;
-            exit;
-        }
-    }
+	$query = "Select count(id_polzov) as counter From polzov Where name = '$login'";
+	$context = LoadDataFromDB($query);
+	if ($context["status"] == 1) {
+		if ($context["data"][0]["counter"] > 0) {
+			echo 1;
+			exit;
+		}
+	}
 
-    $query = "Insert Into polzov (name, pas, role) VALUES (?,?,?)";
-    $params = array($login, sha1($pass), 1); //1-обычный пользак
-    $types = "ssi";
+	$query = "Insert Into polzov (name, pas, role) VALUES (?,?,?)";
+	$params = array($login, sha1($pass), 1); //1-обычный пользак
+	$types = "ssi";
 
-    $res = bd_interaction($query, $params, $types);
-    if ($res["status"] != 1)
-    {
-        echo 2;
-        exit;
-    }
-    else
-    {
+	$res = bd_interaction($query, $params, $types);
+	if ($res["status"] != 1) {
+		echo 2;
+		exit;
+	} else {
 		create_file_structure($login, 'users');
-        echo 1000;
-        exit;
-    }
-}
-
-//создание файловой структуры пользовательских папок
-function create_file_structure($name, $loc)
-{
-	switch($loc)
-	{
-		case "users":
-			// mkdir("data/users/$name", 0700);
-			mkdir("data/users/$name", 777);
-			break;
+		echo 1000;
+		exit;
 	}
 }
 
 // создание переменных сессии
 function session_variables_create($login, $role, $id)
 {
-    $_SESSION['login'] = $login;
-    $_SESSION['role'] = $role;
-    $_SESSION['id'] = $id;
+	$_SESSION['login'] = $login;
+	$_SESSION['role'] = $role;
+	$_SESSION['id'] = $id;
 }
 
 function logout()
 {
-    unset($_SESSION['login']);
-    unset($_SESSION['role']);
-    unset($_SESSION['id']);
-    session_destroy();
-    loadStart();
+	unset($_SESSION['login']);
+	unset($_SESSION['role']);
+	unset($_SESSION['id']);
+	session_destroy();
+	loadStart($GLOBALS["str"]);
 }
 
 //Ф-ция в которую будут получены результаты
 function get_result()
 {
 //     Первое занчени {0 - example, 1 - correct, 2 - perform} | Наименование теста | подсказка для теста | пройден ли тест (0 - непройден или 1) | Консольный вывод
-$str_result = "
+	$str_result = "
 0 | example1 | first example test | 0 | WRONG ANSWER (got [0, 0, 0, 0, 0] expected [9, 7, 6, 3, 8]) |
 
 0 | example2 | second example test | 0 | WRONG ANSWER (got [0, 0, 4195958] expected [0, 0, 0]) |
@@ -455,66 +396,87 @@ $str_result = "
 
 1 | medium_random | medium random sequence, N = 100 | 0 | WRONG ANSWER (got [100, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 909180928, 842084913, 859257138, 1538883328, -1848235966, 0, 0, 0, 0, 4195520, 0, -445851024, 32765, 0, 0, 0, 0, -445858592, 32765, 606315894, 32718, 16, 48, -445858624, 32765, -445858816, 32765, 1538883328, -1848235966, -445858544, 32765, 3, 0, 396, 0, 0, 0, 0, 0, 0, 0, 0, 0, 93, 0, 609851520, 32718, 0, 0, 93, 0, 611927232, 32718, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 612122896, 32718, 0, 0, 4196206, 0, -445853664, 100, -445853264, 32765, 0, 0, 612122896, 100] expected [-51, 795, -130, 34, 140, 886, 946, -82, 611, -827, -901, 199, -547, -195, 121, 173, -368, 260, -810, -80, -727, -480, -664, -804, 815, 857, -476, -286, -350, -454, 274, 599, -660, -857, -811, 37, 586, 692, 955, 197, 866, -946, -605, 876, -584, 516, -395, 48, -225, -205, 525, 49, 316, 861, -198, -313, 274, 326, 402, 925, 429, -325, 80, 327, -624, -173, -637, 962, -925, -682, -285, 498, 930, 111, 373, 355, -779, -832, -329, 625, -969, -721, -295, 922, -280, -730, -418, 460, -713, 14, -227, 860, 923, 295, 521, -672, 343, 237, -979, 3]) |";
 
-$render = new Render("templates\\results.php", $str_result);
-return $render -> renderPage();
+	$render = new Render("templates\\results.php", $str_result);
+	return $render->renderPage();
 
 }
+
+/***  ДЕЙСТВИЯ С ФАЙЛАМИ И ДИРЕКТОРИЯМИ                                                         *****************/
 
 /** КОПИРОВАНИЕ ДИРЕКТОРИЙ */
-function copydirect($source, $dest, $over=false)
+function copydirect($source, $dest, $over = false)
 {
-    if(!is_dir($dest))
-        mkdir($dest);
-    if($handle = opendir($source))
-    {
-        while(false !== ($file = readdir($handle)))
-        {
-            if($file != '.' && $file != '..')
-            {
-                $path = $source . '/' . $file;
-                if(is_file($path))
-                {
-                    if(!is_file($dest . '/' . $file || $over))
-                        if(!@copy($path, $dest . '/' . $file))
-                        {
-                            echo "('.$path.') Ошибка!!! ";
-                        }
-                }
-                elseif(is_dir($path))
-                {
-                    if(!is_dir($dest . '/' . $file))
-                        mkdir($dest . '/' . $file);
-                    copydirect($path, $dest . '/' . $file, $over);
-                }
-            }
-        }
-        closedir($handle);
-    }
+	if (!is_dir($dest))
+		mkdir($dest);
+	if ($handle = opendir($source)) {
+		while (false !== ($file = readdir($handle))) {
+			if ($file != '.' && $file != '..') {
+				$path = $source . '/' . $file;
+				if (is_file($path)) {
+					if (!is_file($dest . '/' . $file || $over))
+						if (!@copy($path, $dest . '/' . $file)) {
+						echo "('.$path.') Ошибка!!! ";
+					}
+				} elseif (is_dir($path)) {
+					if (!is_dir($dest . '/' . $file))
+						mkdir($dest . '/' . $file);
+					copydirect($path, $dest . '/' . $file, $over);
+				}
+			}
+		}
+		closedir($handle);
+	}
 }
 
+//создание файловой структуры пользовательских папок
+function create_file_structure($name, $loc)
+{
+	switch ($loc) {
+		case "users":
+			mkdir("data/users/$name", 777);
+			break;
+	}
+}
+
+// удалить существующий файл
+function delete_file($filename)
+{
+	if (file_exists($filename)) {
+		unlink($filename);
+	}
+}
+
+// очистить существующий файл
+function clean_file($filename)
+{
+	if (file_exists($filename)) {
+		file_put_contents($filename, "");
+	}
+}
+/***  ДЕЙСТВИЯ С ФАЙЛАМИ И ДИРЕКТОРИЯМИ КОНЕЦ   */
 
 /** ОПЕРАЦИИ С БД */
 // выборка из бд
 function LoadDataFromDB($query)
 {
-    if ($query == "")
+	if ($query == "")
 		return;
-		
-	$CONN = $GLOBALS["ConDB"] -> connect();
-    $mySqlCommand = new MySQLCommand($CONN, $query);
-    $context = $mySqlCommand -> requestExecute();
-    
-    return $context;
+
+	$CONN = $GLOBALS["ConDB"]->connect();
+	$mySqlCommand = new MySQLCommand($CONN, $query);
+	$context = $mySqlCommand->requestExecute();
+
+	return $context;
 }
 
 /** Вставка, удаление, обновление */
 function bd_interaction($query, $params, $types)
 {
-	$CONN = $GLOBALS["ConDB"] -> connect();
+	$CONN = $GLOBALS["ConDB"]->connect();
 	$mySqlCommand = new MySQLCommand($CONN, $query, "non_query", $params, $types);
-    $cmd = $mySqlCommand -> requestExecute();
-    
-    return $cmd;
+	$cmd = $mySqlCommand->requestExecute();
+
+	return $cmd;
 }
 /** КОНЕЦ ОПЕРАЦИИ С БД */
 ?>

@@ -6,7 +6,6 @@ Class Esl
     {
         echo '<link rel="stylesheet" href="static/AdminLTE/bower_components/bootstrap/dist/css/bootstrap.min.css">';
 		echo '<link rel="stylesheet" href="static/AdminLTE/bower_components/font-awesome/css/font-awesome.min.css">';
-		echo '<link rel="stylesheet" href="static/AdminLTE/bower_components/Ionicons/css/ionicons.min.css">';
 		echo '<link rel="stylesheet" href="static/AdminLTE/dist/css/AdminLTE.min.css">';
 		echo '<link rel="stylesheet" href="static/AdminLTE/dist/css/skins/skin-green.min.css">';
 		echo '<link rel="stylesheet" href="static/AdminLTE/bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css">';
@@ -16,6 +15,21 @@ Class Esl
         echo '<link rel="stylesheet" href="static/AdminLTE/plugins/iCheck/square/blue.css">';
         /** Свои стили */
         echo '<link rel="stylesheet" href="static/css/mycss.css">';
+    }
+
+    static function LoadMyCss()
+    {
+        echo '<link rel="stylesheet" href="static/css/mycss.css">';
+    }
+
+    static function BootstrapCSS()
+    {
+        echo '<link rel="stylesheet" href="static/AdminLTE/bower_components/bootstrap/dist/css/bootstrap.min.css">';
+    }
+
+    static function LoadDashboardCSS()
+    {
+        echo '<link rel="stylesheet" href="static/css/dashboard.css">';
     }
 
     static function LoadCodeMirrorCss()
@@ -40,6 +54,22 @@ Class Esl
         echo '<script src="static/AdminLTE/bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>';
         /** Свои скрипты */
         echo '<script src="static/Scripts/dt.js"></script>';
+    }
+
+    static function LoadDtJs()
+    {
+        echo '<script src="static/Scripts/dt.js"></script>';
+    }
+
+    static function LoadDtCodemirrorJS()
+    {
+        echo '<script src="static/Scripts/dtCodemirror.js"></script>';
+    }
+
+    static function BootstrapJS()
+    {
+        echo '<script src="static/AdminLTE/bower_components/jquery/dist/jquery.js"></script>';
+        echo '<script src="static/AdminLTE/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>';
     }
 
     static function LoadCodeMirrorJS()
