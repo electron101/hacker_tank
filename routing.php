@@ -57,6 +57,23 @@ switch($act)
 	case "load_start":
 		loadStart($str);
 		break;
+	/** Загружаем тесты */
+	case "admin_tests":
+		admin_tests();
+		break;
+	case "test_add":
+		test_add();
+		break;
+	case "save_test":
+		save_test();
+		break;
+	/** Пользаки */
+	case "admin_users":
+		admin_users();
+		break;
+	case "del_users":
+		DeleteConfirmation();
+		break;
 	default:
 		loadStart($str);
 		break;

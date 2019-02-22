@@ -52,6 +52,7 @@ Class Esl
 		echo '<script src="static/AdminLTE/bower_components/select2/dist/js/select2.full.min.js"></script>';
 		echo '<script src="static/AdminLTE/plugins/iCheck/icheck.min.js"></script>';
         echo '<script src="static/AdminLTE/bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>';
+        echo '<script src="static/AdminLTE/bower_components/ckeditor/ckeditor.js"></script>';
         /** Свои скрипты */
         echo '<script src="static/Scripts/dt.js"></script>';
     }

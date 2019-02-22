@@ -44,20 +44,3 @@
         </div>
     </div>
 </div>
-                    <!-- <div class="box-body no-padding">
-  	if (isset($context['data'][0]['id_task']))
-  	{
-  		 <ul class="nav nav-pills nav-stacked">
-  			for ($i=0; $i<count($context['data']); $i++)
-  			{
-  				 <li class="active"><a href="?act=code&task='.$context['data'][$i]['id_task'].'&task_name='.$context['data'][$i]['task_name'].'"><i class="fa fa-circle"></i>';
-  				$html .=  $context['data'][$i]['tex_min'].' ['.$context['data'][$i]['name'].']</a></li>
-  			}
-  		 </ul>
-  	}
-  	 </div>
-  	 </div>
-            </div>
-        </div>
-    </div>
-</div> -->

@@ -1,5 +1,19 @@
 $(document).ready(function () {
 
+    // CKEditor
+    $(function () {
+        // Replace the <textarea id="editor1"> with a CKEditor
+        // instance, using default configuration.
+        CKEDITOR.replace('editor1', {
+            height: 500
+        });
+    })
+
+    $(function () {
+        $('.select2').select2()
+    });
+
+
     $('#apply, #run').on('click', function (e) {
         e.preventDefault();
         var val = ($(this).attr('value'));
@@ -15,6 +29,19 @@ $(document).ready(function () {
             alert(msg);
         });
     });
+
+    // //Сохранение нового теста
+    // $('#save_test').on('click', function (e) {
+
+    //     e.preventDefault();
+    //     // var data = CKEDITOR.instances.editor1.getData();
+    //     // alert(data);
+    //     var formValid = true;
+
+    //     if (formValid) {
+
+    //     }
+    // });
 
     /** РЕГИСТРАЦИЯ */
     $('#do_reg').click(function (event) {
@@ -74,4 +101,24 @@ $(document).ready(function () {
         }
     });
     /** РЕГИСТРАЦИЯ КОНЕЦ */
+
+    /** Таблицы */
+
+    if ($.fn.dataTable.isDataTable('#tests_table')) {
+        tests_table = $('#tests_table').DataTable();
+    }
+    else {
+        tests_table = $('#tests_table').DataTable({
+            "lengthMenu": [[15, 25, 50, -1], [15, 25, 50, "Все"]],
+            "deferRender": true,
+            'stateSave': false,
+            'select': true,
+            'paging': true,
+            'lengthChange': true,
+            'searching': false,
+            'ordering': true,
+            'info': false,
+            'autoWidth': false
+        });
+    }
 });

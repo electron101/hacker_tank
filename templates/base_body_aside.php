@@ -14,8 +14,8 @@
             <?php if (isset($_SESSION['login']) and $_SESSION['role'] == 0) : ?>
             <!-- Меню для админа -->
             <li class="header">Администрирование</li>
-            <li class="active"><a href="admin_tests"><i class="fa fa-clipboard"></i> <span>Тесты</span></a></li>
-            <li class="active"><a href="admin_users"><i class="fa fa-users"></i> <span>Пользователи</span></a></li>
+            <li class="active"><a href="?act=admin_tests"><i class="fa fa-clipboard"></i> <span>Тесты</span></a></li>
+            <li class="active"><a href="?act=admin_users"><i class="fa fa-users"></i> <span>Пользователи</span></a></li>
             <?php endif; ?>
         </ul>
     </section>

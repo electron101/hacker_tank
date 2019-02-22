@@ -59,11 +59,25 @@ class MoldMaker
                     $middle .= '<input type="'.$val["type"].'" name="'.$key.'" class="form-control" id="'.$id.'" value="'.$default_val.'" '.$special_attribute.' '.$a_.' '.$r_.'> ';
                     $middle .= '</div>';
                 }
-                if ($val["type"] == "textarea")
+                else if ($val["type"] == "file")
+                {
+                    $middle .= '<div class="form-group">';
+                    $middle .= '<label for="'.$id.'">'.$val["label_text"].'</label>';
+                    $middle .= '<input type="'.$val["type"].'" name="'.$key.'" id="'.$id.'">';
+                    $middle .= '</div>';
+                }
+                else if ($val["type"] == "textarea")
                 {
                     $middle .= '<div class="form-group">';
                     $middle .= '<label for='.$key.'>'.$val["label_text"].'</label>';
                     $middle .= '<textarea name="'.$key.'" class="form-control" id="'.$id.'" '.$special_attribute.' '.$a_.' '.$r_.'>'.$default_val.'</textarea>';
+                    $middle .= '</div>';
+                }
+                else if ($val["type"] == "password")
+                {
+                    $middle .= '<div class="form-group">';
+                    $middle .= '<label for='.$key.'>'.$val["label_text"].'</label>';
+                    $middle .= '<input type="'.$val["type"].'" name="'.$key.'" class="form-control" id="'.$id.'">';
                     $middle .= '</div>';
                 }
                 else if ($val["type"] == "select_assoc")
@@ -71,7 +85,7 @@ class MoldMaker
                     $middle .= '<select name="'.$key.'" id="'.$val["id"].'" class="'.$val["class"].'">';
                     foreach ($val["data"] as $k => $v)
                     {
-                        $middle .= '<option value="'.$k.'">'.$v.' | '.$k.'</option>';
+                        $middle .= '<option value="'.$k.'">'.$v.'</option>';
                     }
                     $middle .= '</select>';
                 }
@@ -133,6 +147,13 @@ class MoldMaker
                     $middle .= '<div class="form-group">';
                     $middle .= '<label for='.$key.'>'.$val["label_text"].'</label>';
                     $middle .= '<input type="'.$val["type"].'" name="'.$key.'" class="form-control" id="'.$id.'" value="'.$context["data"][0][$key].'" '.$special_attribute.' '.$a_.' '.$r_.'>';
+                    $middle .= '</div>';
+                }
+                else if ($val["type"] == "file")
+                {
+                    $middle .= '<div class="form-group">';
+                    $middle .= '<label for="'.$id.'">'.$val["label_text"].'</label>';
+                    $middle .= '<input type="'.$val["type"].'" name="'.$key.'" id="'.$id.'">';
                     $middle .= '</div>';
                 }
                 else if ($val["type"] == "select_assoc")

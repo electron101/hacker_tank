@@ -6,8 +6,12 @@ include("classes/render/render.php");
 include("classes/mysqli/MySqlConnection.php");
 /** Подключение к бд */
 require_once("classes/ssa/ConnectDb.php");
+
 /** Генератор форм */
 include("classes/ssa/moldmaker.php");
+
+/** Дополнительные функции */
+include("classes/ssa/AdditionalFunc.php");
 
 /** Глобальные переменные */
 $str = "Select t.id_lesson, t.id_task, t.name as task_name, c.name, l.description, t.tex_min, l.name as lesson_name,
@@ -400,6 +404,149 @@ function get_result()
 	return $render->renderPage();
 
 }
+
+/** АДМИНКА 																					*****************/
+// добавляем тесты
+function admin_tests()
+{
+	$query = "Select t.id_task, t.rus_name, l.description lesson, c.name category 
+		From task t
+		INNER JOIN lessons l on l.id_lesson = t.id_lesson
+		INNER JOIN category c on c.id_category = t.id_category
+		ORDER BY t.id_lesson, t.id_task";
+	$context = LoadDataFromDB($query);
+	$render = new Render("templates/tests.php", $context);
+	return $render->renderPage();
+}
+
+function test_add()
+{
+	$query_category = "Select id_category, name From category";
+	$categories = LoadDataFromDB($query_category);
+	$query_lessons = "Select id_lesson, description From lessons";
+	$lessons = LoadDataFromDB($query_lessons);
+	$context['categories'] = $categories;
+	$context['lessons'] = $lessons;
+	$render = new Render("templates/add_test.php", $context);
+	return $render->renderPage();
+}
+
+//Сохранение тестов в бд
+function save_test()
+{
+	$input = $GLOBALS['input'];
+	$name = isset($input['name']) ? $input['name'] : "";
+	$rus_name = isset($input['rus_name']) ? $input['rus_name'] : "";
+	$text = isset($input['editor1']) ? $input['editor1'] : "";
+	$category = isset($input['category']) ? $input['category'] : "";
+	$text_min = isset($input['text_min']) ? $input['text_min'] : "";
+	$lesson = isset($input['lesson']) ? $input['lesson'] : "";
+	if (!file_exists("data/code_templates/"))
+		mkdir("data/code_templates", 777);
+	//Обработка файлов
+	$uploaddir = "data/code_templates/".$name."/";
+	//код на си
+	$c_link = '';
+	$csharp_link = '';
+	$file_name = AddFunc::translit($input['c-files']['name']);
+	$uploadfile = $uploaddir . basename($file_name);
+	if (move_uploaded_file($input['c-files']['tmp_name'], $uploadfile))
+	{
+		$c_link = $uploaddir . 'c/';
+		echo '<script>alert('.$uploadfile.')</script>';
+		$zip = new ZipArchive;
+		$res = $zip->open($uploadfile);
+		if ($res === TRUE)
+		{
+			$zip->extractTo($uploaddir);
+			$zip->close();
+			delete_file($uploadfile);
+		}
+	}
+	//код на шарпе
+	$file_name2 = translit($input['csharp-files']['name']);
+	$uploadfile2 = $uploaddir . basename($file_name2);
+	if (move_uploaded_file($input['csharp-files']['tmp_name'], $uploadfile2))
+	{
+		$csharp_link = $uploaddir . 'sharp/';
+		$zip = new ZipArchive;
+		$res = $zip->open($uploadfile2);
+		if ($res === TRUE)
+		{
+			$zip->extractTo($uploaddir);
+			$zip->close();
+			delete_file($uploadfile2);
+		}
+	}
+
+	$insert_query = "Insert Into task (name, rus_name, text, id_category, tex_min, id_lesson) VALUES (?, ?, ?, ?, ?, ?)";
+	$params = array($name, $rus_name, $text, $category, $text_min, $lesson);
+	$types = 'sssisi';
+	$res = bd_interaction($insert_query, $params, $types);
+	if ($res["status"] == 1)
+	{
+		$sel_query = 'Select id_task From task ORDER BY id_task desc limit 1';
+		$data = LoadDataFromDB($sel_query);
+		$id_task = $data['data'][0]['id_task'];
+		//Добавляем пути к файла в бд
+		$c_query = "Insert Into task_lang (id_task, id_lang, template_link_folder_code) VALUES (?, 1, ?)";
+		$c_params = array($id_task, $c_link);
+		$c_types = 'is';
+		bd_interaction($c_query, $c_params, $c_types);
+
+		$csharp_query = "Insert Into task_lang (id_task, id_lang, template_link_folder_code) VALUES (?, 2, ?)";
+		$csharp_params = array($id_task, $csharp_link);
+		$csharp_types = 'is';
+		bd_interaction($csharp_query, $csharp_params, $csharp_types);
+
+		loadStart($GLOBALS['str']);
+	}
+}
+
+function admin_users()
+{
+	$query = "Select id_polzov id, name login, role From polzov Order By id_polzov";
+	$context = LoadDataFromDB($query);
+
+	if ($context["status"] == 1) {
+		$render = new Render("templates/users.php", $context);
+		return $render->renderPage();
+	} else {
+		echo 'Возникли ошибки в ходе выполнения запроса';
+	}
+}
+
+/** Подтверждение удаления */
+function DeleteConfirmation()
+{
+	$input = $GLOBALS['input'];
+	$id = isset($input['id']) ? $input['id'] : "";
+	$act = isset($input['act']) ? $input['act'] : "";
+	$name = isset($input['name']) ? $input['name'] : "имя не установлено";
+	$context = ["id" => $id, "act" => $act, "name" => $name];
+	$render = new Render("templates/delete_view.php", $context);
+	return $render->renderPage();
+}
+/** Удалить */
+function Delete()
+{
+	$input = $GLOBALS['input'];
+	$id = isset($input['id']) ? $input['id'] : "";
+	$from = isset($input['from']) ? $input['from'] : "";
+
+	switch ($from) {
+		case "del_users":
+			$query = "Delete From polzov Where id_polzov = ?";
+			break;
+	}
+	$params = array($id);
+	bd_interaction($query, $params);
+	switch ($from) {
+		case "del_users":
+			admin_users();
+	}
+}
+/** АДМИНКА КОНЕЦ */
 
 /***  ДЕЙСТВИЯ С ФАЙЛАМИ И ДИРЕКТОРИЯМИ                                                         *****************/
 
