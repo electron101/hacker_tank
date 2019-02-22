@@ -115,6 +115,12 @@ switch ($act) {
 	case "del_lesson":
 		DeleteConfirmation();
 		break;
+	case "download_file":
+		download_file();
+		break;
+	case "del_file":
+		del_file();
+		break;
 	// подтверждение удаления
 	case "confirm_delete":
 		Delete();

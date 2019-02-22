@@ -5,7 +5,7 @@ Class Esl
     static function LoadBaseCss()
     {
         echo '<link rel="stylesheet" href="static/AdminLTE/bower_components/bootstrap/dist/css/bootstrap.min.css">';
-		echo '<link rel="stylesheet" href="static/AdminLTE/bower_components/font-awesome/css/font-awesome.min.css">';
+        echo '<link rel="stylesheet" href="static/AdminLTE/bower_components/font-awesome/css/font-awesome.min.css">';
 		echo '<link rel="stylesheet" href="static/AdminLTE/dist/css/AdminLTE.min.css">';
 		echo '<link rel="stylesheet" href="static/AdminLTE/dist/css/skins/skin-green.min.css">';
 		echo '<link rel="stylesheet" href="static/AdminLTE/bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css">';

@@ -657,8 +657,8 @@ function update_test()
 			delete_directory(substr($c_files['data'][0]['template_link_folder_code'], 0, -1));
 		} else {
 			//Обновляем файлы в папках и в таблице
-			if (!file_exists("data/code_templates/".$name."/"))
-				mkdir("data/code_templates/".$name."/", 777);
+			if (!file_exists("data/code_templates/" . $name . "/"))
+				mkdir("data/code_templates/" . $name . "/", 777);
 
 			$file_name = AddFunc::translit($input['c-files']['name']);
 			$uploadfile = $uploaddir . basename($file_name);
@@ -700,8 +700,8 @@ function update_test()
 			delete_directory(substr($csharp_files['data'][0]['template_link_folder_code'], 0, -1));
 		} else {
 			//Обновляем файлы в папках и в таблице
-			if (!file_exists("data/code_templates/".$name."/"))
-				mkdir("data/code_templates".$name."/", 777);
+			if (!file_exists("data/code_templates/" . $name . "/"))
+				mkdir("data/code_templates" . $name . "/", 777);
 
 			$file_name = AddFunc::translit($input['csharp-files']['name']);
 			$uploadfile = $uploaddir . basename($file_name);
@@ -738,6 +738,43 @@ function update_test()
 	}
 
 	admin_tests();
+}
+
+function download_file()
+{
+	$input = $GLOBALS['input'];
+
+	$path = isset($input['path']) ? $input['path'] : "";
+	$name = isset($input['name']) ? $input['name'] : "";
+
+	$dir = $path . $name;
+	$destination = $path . $name . '.zip';
+
+	toZip($destination, $dir);
+
+	header('Content-Type: application/zip');
+	header('Content-Disposition: attachment; filename="' . $name . '.zip"');
+	readfile($destination);
+
+	if (file_exists($destination))
+		delete_file($destination);
+}
+
+function del_file()
+{
+	$input = $GLOBALS['input'];
+
+	$path = isset($input['path']) ? $input['path'] : "";
+	$name = isset($input['name']) ? $input['name'] : "";
+
+	$dir = $path . $name;
+
+	delete_directory($dir);
+
+	if (countDir($path) == 0) {
+		delete_directory(substr($path, 0, -1));
+	}
+	echo '<script>window.history.back();</script>';
 }
 
 function admin_users()
@@ -797,6 +834,38 @@ function Delete()
 /** АДМИНКА КОНЕЦ */
 
 /***  ДЕЙСТВИЯ С ФАЙЛАМИ И ДИРЕКТОРИЯМИ                                                         *****************/
+
+/** Упаковать файл в архив */
+function toZip($destination, $dir)
+{
+	$dir = str_replace('\\', '/', realpath($dir));
+
+	$zip = new ZipArchive();
+	if (!$zip->open($destination, ZIPARCHIVE::CREATE)) {
+		return false;
+	}
+
+	if (is_dir($dir) === true) {
+		$files = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($dir), RecursiveIteratorIterator::SELF_FIRST);
+
+		foreach ($files as $file) {
+			$file = str_replace('\\', '/', $file);
+			if (in_array(substr($file, strrpos($file, '/') + 1), array('.', '..')))
+				continue;
+
+			$file = realpath($file);
+			$file = str_replace('\\', '/', $file);
+
+			if (is_dir($file) === true) {
+				$zip->addEmptyDir(str_replace($dir . '/', '', $file . '/'));
+			} else if (is_file($file) === true) {
+				$zip->addFromString(str_replace($dir . '/', '', $file), file_get_contents($file));
+			}
+		}
+	}
+
+	return $zip->close();
+}
 
 /** Посчитать кол-во директорий */
 function countDir($dir)

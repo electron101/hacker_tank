@@ -89,6 +89,35 @@
             </div>
             </form>
         </div>
+        <div class="box box-default">
+            <div class="box-header with-border">
+                <h3 class="box-title"> Папки связанные с этим тестом</h3>
+            </div>
+            <div class="box-body">
+                <table id="users_table" class="table table-bordered table-hover" style="width: 100%">
+                <tbody>
+                <?php
+                $dir = "data/code_templates/" . $context['task']['data'][0]['name'] . "/";
+                if (file_exists($dir)){
+                    $dir_list = scandir($dir);
+                    foreach ($dir_list as $d) {
+                        if ($d != '.' && $d != '..') {
+                    ?>
+                        <tr>
+                            <td><span class="glyphicon glyphicon-folder-open" style="font-size: 50px; color: ##21292d;"></span></td>
+                            <td><b><?=$d?></b></td>
+                            <td><a href="?act=download_file&name=<?=$d?>&path=<?=$dir?>"><i class="fa fa-download"></i> <span>Скачать</span></a> </td>
+                            <td><a href="?act=del_file&name=<?=$d?>&path=<?=$dir?>"><i class="fa fa-trash"></i> <span>Удалить</span></a></td>
+                        </tr>
+                    <?php
+                        }
+                    }
+                }
+                ?>
+                </tbody>
+                </table>
+            </div>
+        </div>
     </div>
 </div>
 <?php endif; ?>
