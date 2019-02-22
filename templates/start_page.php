@@ -33,7 +33,7 @@
                                 <td><span class="badge bg-red">0%</span></td>
                                 <td>
                                     <a href="" class="btn btn-block btn-default btn-xs">Просмотр</a>
-                                    <a href="?act=code&task_name=<?=$context['data'][$i]['task_name']?>" class="btn btn-block btn-primary btn-xs">Старт</a>
+                                    <a href="?act=code&task_name=<?=$context['data'][$i]['task_name']?>&id=<?=$context['data'][$i]['id_task']?>" class="btn btn-block btn-primary btn-xs">Старт</a>
                                 </td>
                             </tr>
                             <?php endfor; ?>

@@ -7,11 +7,13 @@ $(document).ready(function () {
             cEditor.setOption("mode", "text/x-csrc");
         if (lang == "sharp")
             cEditor.setOption("mode", "text/x-csharp");
+
+        task_name = $('#task_name').val;
         // подгружаем файл сниппета
         $.ajax({
             url: "",
             type: "POST",
-            data: { 'act': 'change_lang', 'lang': lang },
+            data: { 'act': 'change_lang', 'lang': lang , 'task_name': task_name},
             cache: false
         }).done(function (answ) {
             cEditor.setValue(answ);

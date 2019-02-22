@@ -65,12 +65,13 @@ function loadBase()
 	}
 	$input = $GLOBALS['input'];
 	$task_name = isset($input['task_name']) ? $input['task_name'] : "";
+	$id = isset($input['id']) ? $input['id'] : "";
 	
 	/*Корпирование директории*/
 	$dir = "data/users/" . $_SESSION['login'] . "/" . $task_name;
 	copydirect("data/code_templates/" . $task_name, $dir, 1);
 
-	$query = "Select rus_name, tex_min, text, name, id_task From task";
+	$query = "Select rus_name, tex_min, text, name, id_task From task Where id_task = ".$id;
 	$context['bd'] = LoadDataFromDB($query);
 
 	$snippet = "data/code_templates/" . $task_name . "/c/org_snippet";
@@ -85,16 +86,17 @@ function change_lang()
 {
 	$input = $GLOBALS['input'];
 	$lang = isset($input['lang']) ? $input['lang'] : "";
+	$task_name = isset($input['task_name']) ? $input['task_name'] : "";
 
 	switch ($lang) {
 		case "c":
-			$code = file_get_contents("data/code_templates/cyclic_rotation/c/org_snippet");
+			$code = file_get_contents("data/code_templates/".$task_name."/c/org_snippet");
 			break;
 		case "sharp":
-			$code = file_get_contents("data/code_templates/cyclic_rotation/sharp/org_snippet");
+			$code = file_get_contents("data/code_templates/".$task_name."/sharp/org_snippet");
 			break;
 		default:
-			$code = file_get_contents("data/code_templates/cyclic_rotation/c/org_snippet");
+			$code = file_get_contents("data/code_templates/".$task_name."/c/org_snippet");
 			break;
 	}
 	echo $code;
@@ -550,6 +552,10 @@ function save_test()
 	$lesson = isset($input['lesson']) ? $input['lesson'] : "";
 	if (!file_exists("data/code_templates/"))
 		mkdir("data/code_templates", 777);
+
+	if (!file_exists("data/code_templates/" . $name . "/"))
+		mkdir("data/code_templates/" . $name . "/", 777);
+
 	//Обработка файлов
 	$uploaddir = "data/code_templates/" . $name . "/";
 	//код на си
@@ -701,7 +707,7 @@ function update_test()
 		} else {
 			//Обновляем файлы в папках и в таблице
 			if (!file_exists("data/code_templates/" . $name . "/"))
-				mkdir("data/code_templates" . $name . "/", 777);
+				mkdir("data/code_templates/" . $name . "/", 777);
 
 			$file_name = AddFunc::translit($input['csharp-files']['name']);
 			$uploadfile = $uploaddir . basename($file_name);
