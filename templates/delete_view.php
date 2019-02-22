@@ -9,7 +9,7 @@
             <div class="box-body">
             <a class="btn btn-md btn-danger btn_in_bottom" href="?act=confirm_delete&id=<?=$context["id"]?>&from=<?=$context["act"]?>" role="button" style="margin: 12px;">
 			    <span class="fa fa-trash" aria-hidden="true"></span> Удалить</a>
-            <a class="btn btn-md btn-default btn_in_bottom" href="?act=load_base" role="button" style="margin: 12px;">Отменить</a>
+            <a class="btn btn-md btn-default btn_in_bottom" href="?act=go_back" role="button" style="margin: 12px;">Отменить</a>
             </div>
         </div>
     </div>

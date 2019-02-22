@@ -106,6 +106,12 @@ switch ($act) {
 	case "admin_users":
 		admin_users();
 		break;
+	case "go_back":
+		go_back();
+		break;
+	case "del_test":
+		DeleteConfirmation();
+		break;
 	case "del_users":
 		DeleteConfirmation();
 		break;

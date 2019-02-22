@@ -71,7 +71,7 @@ function loadBase()
 	$dir = "data/users/" . $_SESSION['login'] . "/" . $task_name;
 	copydirect("data/code_templates/" . $task_name, $dir, 1);
 
-	$query = "Select rus_name, tex_min, text, name, id_task From task Where id_task = ".$id;
+	$query = "Select rus_name, tex_min, text, name, id_task From task Where id_task = " . $id;
 	$context['bd'] = LoadDataFromDB($query);
 
 	$snippet = "data/code_templates/" . $task_name . "/c/org_snippet";
@@ -90,13 +90,13 @@ function change_lang()
 
 	switch ($lang) {
 		case "c":
-			$code = file_get_contents("data/code_templates/".$task_name."/c/org_snippet");
+			$code = file_get_contents("data/code_templates/" . $task_name . "/c/org_snippet");
 			break;
 		case "sharp":
-			$code = file_get_contents("data/code_templates/".$task_name."/sharp/org_snippet");
+			$code = file_get_contents("data/code_templates/" . $task_name . "/sharp/org_snippet");
 			break;
 		default:
-			$code = file_get_contents("data/code_templates/".$task_name."/c/org_snippet");
+			$code = file_get_contents("data/code_templates/" . $task_name . "/c/org_snippet");
 			break;
 	}
 	echo $code;
@@ -780,7 +780,7 @@ function del_file()
 	if (countDir($path) == 0) {
 		delete_directory(substr($path, 0, -1));
 	}
-	echo '<script>window.history.back();</script>';
+	go_back(-1);
 }
 
 function admin_users()
@@ -794,6 +794,11 @@ function admin_users()
 	} else {
 		echo 'Возникли ошибки в ходе выполнения запроса';
 	}
+}
+
+function go_back($step = -2)
+{
+	echo '<script>window.history.go(' . $step . ');</script>';
 }
 
 /** Подтверждение удаления */
@@ -813,6 +818,7 @@ function Delete()
 	$input = $GLOBALS['input'];
 	$id = isset($input['id']) ? $input['id'] : "";
 	$from = isset($input['from']) ? $input['from'] : "";
+	$pass = 0;
 
 	switch ($from) {
 		case "del_users":
@@ -824,10 +830,16 @@ function Delete()
 		case "del_lesson":
 			$query = "Delete From lessons Where id_lesson = ?";
 			break;
+		case "del_test":
+			Del_Test($id);
+			$pass = 1;
+			break;
 	}
-	$params = array($id);
-	$types = 'i';
-	bd_interaction($query, $params, $types);
+	if ($pass == 0) {
+		$params = array($id);
+		$types = 'i';
+		bd_interaction($query, $params, $types);
+	}
 	switch ($from) {
 		case "del_users":
 			admin_users();
@@ -835,7 +847,31 @@ function Delete()
 			admin_categories();
 		case "del_lesson":
 			admin_lessons();
+		case "del_test":
+			admin_tests();
 	}
+}
+
+function Del_Test($id)
+{
+	$query = "SELECT name FROM task WHERE id_task = " . $id;
+	$data = LoadDataFromDB($query);
+	$name = $data['data'][0]['name'];
+
+	$dir = 'data/code_templates/' . $name;
+	$query_del1 = "DELETE FROM task WHERE id_task = ?";
+	$params1 = array($id);
+	$types1 = 'i';
+	bd_interaction($query_del1, $params1, $types1);
+
+	$query_del2 = "DELETE FROM task_lang WHERE id_task = ?";
+	$params2 = array($id);
+	$types2 = 'i';
+	bd_interaction($query_del2, $params2, $types2);
+
+	delete_directory($dir);
+
+	return true;
 }
 /** АДМИНКА КОНЕЦ */
 
