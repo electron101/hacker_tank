@@ -30,19 +30,6 @@ $(document).ready(function () {
         });
     });
 
-    // //Сохранение нового теста
-    // $('#save_test').on('click', function (e) {
-
-    //     e.preventDefault();
-    //     // var data = CKEDITOR.instances.editor1.getData();
-    //     // alert(data);
-    //     var formValid = true;
-
-    //     if (formValid) {
-
-    //     }
-    // });
-
     /** РЕГИСТРАЦИЯ */
     $('#do_reg').click(function (event) {
         event.preventDefault();

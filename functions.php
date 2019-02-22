@@ -1,5 +1,9 @@
 <?php
 
+if (!extension_loaded('zip')) {
+	echo '<script>alert("Не загружено расширение ZIP!")</script>';
+}
+
 /** Класс отрисовки страниц */
 include("classes/render/render.php");
 /** класс работы с базой mysql */
@@ -406,6 +410,109 @@ function get_result()
 }
 
 /** АДМИНКА 																					*****************/
+/** Разбираемся с категориями сложности и темами */
+function admin_categories()
+{
+	$query = "Select * From category";
+	$context = LoadDataFromDB($query);
+	$render = new Render("templates\categories.php", $context);
+	return $render->renderPage();
+}
+
+function category_add()
+{
+	$createView = new moldmaker('Category', 'Добавить категорию', 'add_new_category');
+	$createView->CreateView();
+}
+
+function add_new_category()
+{
+	$input = $GLOBALS['input'];
+	$name = isset($input['name']) ? $input['name'] : "";
+	$query = "INSERT INTO category (name) VALUES (?)";
+	$params = array($name);
+	$types = 's';
+	$res = bd_interaction($query, $params, $types);
+	if ($res['status'] == 1)
+		admin_categories();
+}
+
+function edit_category()
+{
+	$input = $GLOBALS['input'];
+	$id = isset($input['id']) ? $input['id'] : "";
+	$query = "Select id_category, name From category Where id_category = $id";
+	$context = LoadDataFromDB($query);
+	$editView = new moldmaker('Category', 'Редактировать категорию', 'update_category');
+	$editView->EditView($context, $unique_key = 'id_category');
+}
+
+function update_category()
+{
+	$input = $GLOBALS['input'];
+	if (!isset($input["unique_id"])) return;
+
+	$id = isset($input['unique_id']) ? $input['unique_id'] : "";
+	$name = isset($input['name']) ? $input['name'] : "";
+	$query = 'Update category SET name = ? Where id_category = ?';
+	$params = array($name, $id);
+	$types = 'si';
+	$res = bd_interaction($query, $params, $types);
+	if ($res["status"] == 1) admin_categories();
+}
+
+function admin_lessons()
+{
+	$query = "Select * From lessons";
+	$context = LoadDataFromDB($query);
+	$render = new Render("templates\lessons.php", $context);
+	return $render->renderPage();
+}
+
+function lesson_add()
+{
+	$createView = new moldmaker('Lesson', 'Добавить тему', 'add_new_lesson');
+	$createView->CreateView();
+}
+
+function add_new_lesson()
+{
+	$input = $GLOBALS['input'];
+	$name = isset($input['name']) ? $input['name'] : "";
+	$description = isset($input['description']) ? $input['description'] : "";
+	$query = "INSERT INTO lessons (name, description) VALUES (?, ?)";
+	$params = array($name, $description);
+	$types = 'ss';
+	$res = bd_interaction($query, $params, $types);
+	if ($res['status'] == 1)
+		admin_lessons();
+}
+
+function edit_lesson()
+{
+	$input = $GLOBALS['input'];
+	$id = isset($input['id']) ? $input['id'] : "";
+	$query = "Select id_lesson, name, description From lessons Where id_lesson = $id";
+	$context = LoadDataFromDB($query);
+	$editView = new moldmaker('Lesson', 'Редактировать тему', 'update_lesson');
+	$editView->EditView($context, $unique_key = 'id_lesson');
+}
+
+function update_lesson()
+{
+	$input = $GLOBALS['input'];
+	if (!isset($input["unique_id"])) return;
+
+	$id = isset($input['unique_id']) ? $input['unique_id'] : "";
+	$name = isset($input['name']) ? $input['name'] : "";
+	$description = isset($input['description']) ? $input['description'] : "";
+	$query = 'Update lessons SET name = ?, description = ? Where id_lesson = ?';
+	$params = array($name, $description, $id);
+	$types = 'ssi';
+	$res = bd_interaction($query, $params, $types);
+	if ($res["status"] == 1) admin_lessons();
+}
+
 // добавляем тесты
 function admin_tests()
 {
@@ -444,35 +551,30 @@ function save_test()
 	if (!file_exists("data/code_templates/"))
 		mkdir("data/code_templates", 777);
 	//Обработка файлов
-	$uploaddir = "data/code_templates/".$name."/";
+	$uploaddir = "data/code_templates/" . $name . "/";
 	//код на си
 	$c_link = '';
 	$csharp_link = '';
 	$file_name = AddFunc::translit($input['c-files']['name']);
 	$uploadfile = $uploaddir . basename($file_name);
-	if (move_uploaded_file($input['c-files']['tmp_name'], $uploadfile))
-	{
+	if (move_uploaded_file($input['c-files']['tmp_name'], $uploadfile)) {
 		$c_link = $uploaddir . 'c/';
-		echo '<script>alert('.$uploadfile.')</script>';
 		$zip = new ZipArchive;
 		$res = $zip->open($uploadfile);
-		if ($res === TRUE)
-		{
+		if ($res === true) {
 			$zip->extractTo($uploaddir);
 			$zip->close();
 			delete_file($uploadfile);
 		}
 	}
 	//код на шарпе
-	$file_name2 = translit($input['csharp-files']['name']);
+	$file_name2 = AddFunc::translit($input['csharp-files']['name']);
 	$uploadfile2 = $uploaddir . basename($file_name2);
-	if (move_uploaded_file($input['csharp-files']['tmp_name'], $uploadfile2))
-	{
+	if (move_uploaded_file($input['csharp-files']['tmp_name'], $uploadfile2)) {
 		$csharp_link = $uploaddir . 'sharp/';
 		$zip = new ZipArchive;
 		$res = $zip->open($uploadfile2);
-		if ($res === TRUE)
-		{
+		if ($res === true) {
 			$zip->extractTo($uploaddir);
 			$zip->close();
 			delete_file($uploadfile2);
@@ -483,8 +585,7 @@ function save_test()
 	$params = array($name, $rus_name, $text, $category, $text_min, $lesson);
 	$types = 'sssisi';
 	$res = bd_interaction($insert_query, $params, $types);
-	if ($res["status"] == 1)
-	{
+	if ($res["status"] == 1) {
 		$sel_query = 'Select id_task From task ORDER BY id_task desc limit 1';
 		$data = LoadDataFromDB($sel_query);
 		$id_task = $data['data'][0]['id_task'];
@@ -501,6 +602,142 @@ function save_test()
 
 		loadStart($GLOBALS['str']);
 	}
+}
+
+/** Редактирование существующего теста */
+function edit_test()
+{
+	$input = $GLOBALS['input'];
+	$id = isset($input['id']) ? $input['id'] : "";
+
+	$query = "SELECT id_task, name, rus_name, text, tex_min, id_category, id_lesson From task WHERE id_task = " . $id;
+	$tasks = LoadDataFromDB($query);
+	$context['task'] = $tasks;
+	$query_category = "SELECT id_category, name From category";
+	$categories = LoadDataFromDB($query_category);
+	$context['categories'] = $categories;
+	$query_lessons = "Select id_lesson, description From lessons";
+	$lessons = LoadDataFromDB($query_lessons);
+	$context['lessons'] = $lessons;
+
+	$render = new Render("templates/edit_test.php", $context);
+	return $render->renderPage();
+}
+
+function update_test()
+{
+	$input = $GLOBALS['input'];
+
+	$need_update_c = isset($input['need_update_c']) ? $input['need_update_c'] : "off";
+	$need_update_csharp = isset($input['need_update_csharp']) ? $input['need_update_csharp'] : "off";
+
+	$name = isset($input['name']) ? $input['name'] : "";
+	$rus_name = isset($input['rus_name']) ? $input['rus_name'] : "";
+	$text = isset($input['editor1']) ? $input['editor1'] : "";
+	$category = isset($input['category']) ? $input['category'] : "";
+	$text_min = isset($input['text_min']) ? $input['text_min'] : "";
+	$lesson = isset($input['lesson']) ? $input['lesson'] : "";
+	$id_task = isset($input['id_task']) ? $input['id_task'] : "";
+
+	$insert_query = "Update task SET name = ?, rus_name = ?, text = ?, id_category = ?, tex_min = ?, id_lesson = ? Where id_task = ?";
+	$params = array($name, $rus_name, $text, $category, $text_min, $lesson, $id_task);
+	$types = 'sssisii';
+	$res = bd_interaction($insert_query, $params, $types);
+
+	$uploaddir = "data/code_templates/" . $name . "/";
+	if ($need_update_c == "on") {
+		if ($input['c-files']['name'] == "") {
+			//Удаляем файлы и запись в бд
+			$c_sel_query = "SELECT template_link_folder_code FROM task_lang WHERE id_task = " . $id_task . " and id_lang = 1";
+			$c_files = LoadDataFromDB($c_sel_query);
+			$c_del_quer = "DELETE FROM task_lang WHERE id_task = ? and id_lang = 1";
+			$c_params = array($id_task);
+			$c_types = 'i';
+			bd_interaction($c_del_quer, $c_params, $c_types);
+			delete_directory(substr($c_files['data'][0]['template_link_folder_code'], 0, -1));
+		} else {
+			//Обновляем файлы в папках и в таблице
+			if (!file_exists("data/code_templates/".$name."/"))
+				mkdir("data/code_templates/".$name."/", 777);
+
+			$file_name = AddFunc::translit($input['c-files']['name']);
+			$uploadfile = $uploaddir . basename($file_name);
+			if (move_uploaded_file($input['c-files']['tmp_name'], $uploadfile)) {
+				$c_link = $uploaddir . 'c/';
+				$zip = new ZipArchive;
+				$res = $zip->open($uploadfile);
+				if ($res === true) {
+					$zip->extractTo($uploaddir);
+					$zip->close();
+					delete_file($uploadfile);
+
+					$check_query = "SELECT count(*) as counter FROM task_lang WHERE id_lang = 1 AND id_task = " . $id_task;
+					$d1 = LoadDataFromDB($check_query);
+					if ($d1['data'][0]['counter'] > 0) {
+						$c_query = "UPDATE task_lang SET template_link_folder_code = ? WHERE id_lang = 1 and id_task = ?";
+						$c_params = array($c_link, $id_task);
+						$c_types = 'si';
+						bd_interaction($c_query, $c_params, $c_types);
+					} else {
+						$c_query = "Insert Into task_lang (id_task, id_lang, template_link_folder_code) VALUES (?, 1, ?)";
+						$c_params = array($id_task, $c_link);
+						$c_types = 'is';
+						bd_interaction($c_query, $c_params, $c_types);
+					}
+				}
+			}
+		}
+	}
+	if ($need_update_csharp == "on") {
+		if ($input['csharp-files']['name'] == "") {
+			//Удаляем файлы и запись в бд
+			$csharp_sel_query = "SELECT template_link_folder_code FROM task_lang WHERE id_task = " . $id_task . " and id_lang = 2";
+			$csharp_files = LoadDataFromDB($csharp_sel_query);
+			$csharp_del_quer = "DELETE FROM task_lang WHERE id_task = ? and id_lang = 2";
+			$csharp_params = array($id_task);
+			$csharp_types = 'i';
+			bd_interaction($csharp_del_quer, $csharp_params, $csharp_types);
+			delete_directory(substr($csharp_files['data'][0]['template_link_folder_code'], 0, -1));
+		} else {
+			//Обновляем файлы в папках и в таблице
+			if (!file_exists("data/code_templates/".$name."/"))
+				mkdir("data/code_templates".$name."/", 777);
+
+			$file_name = AddFunc::translit($input['csharp-files']['name']);
+			$uploadfile = $uploaddir . basename($file_name);
+			if (move_uploaded_file($input['csharp-files']['tmp_name'], $uploadfile)) {
+				$csharp_link = $uploaddir . 'sharp/';
+				$zip = new ZipArchive;
+				$res = $zip->open($uploadfile);
+				if ($res === true) {
+					$zip->extractTo($uploaddir);
+					$zip->close();
+					delete_file($uploadfile);
+
+					$check_query = "SELECT count(*) as counter FROM task_lang WHERE id_lang = 2 AND id_task = " . $id_task;
+					$d1 = LoadDataFromDB($check_query);
+					if ($d1['data'][0]['counter'] > 0) {
+						$csharp_query = "UPDATE task_lang SET template_link_folder_code = ? WHERE id_lang = 2 and id_task = ?";
+						$csharp_params = array($csharp_link, $id_task);
+						$csharp_types = 'si';
+						bd_interaction($csharp_query, $csharp_params, $csharp_types);
+					} else {
+						$csharp_query = "Insert Into task_lang (id_task, id_lang, template_link_folder_code) VALUES (?, 2, ?)";
+						$csharp_params = array($id_task, $csharp_link);
+						$csharp_types = 'is';
+						bd_interaction($csharp_query, $csharp_params, $csharp_types);
+					}
+				}
+			}
+		}
+	}
+
+	$dir = "data/code_templates/" . $name . "/";
+	if (countDir($dir) == 0) {
+		delete_directory(substr($dir, 0, -1));
+	}
+
+	admin_tests();
 }
 
 function admin_users()
@@ -538,17 +775,41 @@ function Delete()
 		case "del_users":
 			$query = "Delete From polzov Where id_polzov = ?";
 			break;
+		case "del_category":
+			$query = "Delete From category Where id_category = ?";
+			break;
+		case "del_lesson":
+			$query = "Delete From lessons Where id_lesson = ?";
+			break;
 	}
 	$params = array($id);
-	bd_interaction($query, $params);
+	$types = 'i';
+	bd_interaction($query, $params, $types);
 	switch ($from) {
 		case "del_users":
 			admin_users();
+		case "del_category":
+			admin_categories();
+		case "del_lesson":
+			admin_lessons();
 	}
 }
 /** АДМИНКА КОНЕЦ */
 
 /***  ДЕЙСТВИЯ С ФАЙЛАМИ И ДИРЕКТОРИЯМИ                                                         *****************/
+
+/** Посчитать кол-во директорий */
+function countDir($dir)
+{
+	$i = 0;
+	$dir_list = scandir($dir);
+	foreach ($dir_list as $d) {
+		if ($d != '.' && $d != '..') {
+			$i++;
+		}
+	}
+	return $i;
+}
 
 /** КОПИРОВАНИЕ ДИРЕКТОРИЙ */
 function copydirect($source, $dest, $over = false)
@@ -591,6 +852,31 @@ function delete_file($filename)
 	if (file_exists($filename)) {
 		unlink($filename);
 	}
+}
+
+// удаление директории
+function delete_directory($dir)
+{
+	if (!file_exists($dir)) {
+		return true;
+	}
+
+	if (!is_dir($dir)) {
+		return unlink($dir);
+	}
+
+	foreach (scandir($dir) as $item) {
+		if ($item == '.' || $item == '..') {
+			continue;
+		}
+
+		if (!delete_directory($dir . DIRECTORY_SEPARATOR . $item)) {
+			return false;
+		}
+
+	}
+
+	return rmdir($dir);
 }
 
 // очистить существующий файл

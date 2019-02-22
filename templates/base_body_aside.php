@@ -16,6 +16,8 @@
             <li class="header">Администрирование</li>
             <li class="active"><a href="?act=admin_tests"><i class="fa fa-clipboard"></i> <span>Тесты</span></a></li>
             <li class="active"><a href="?act=admin_users"><i class="fa fa-users"></i> <span>Пользователи</span></a></li>
+            <li class="active"><a href="?act=admin_categories"><i class="fa fa-users"></i> <span>Категории</span></a></li>
+            <li class="active"><a href="?act=admin_lessons"><i class="fa fa-edit"></i> <span>Темы</span></a></li>
             <?php endif; ?>
         </ul>
     </section>

@@ -25,4 +25,19 @@ class Users
         return $form_presentation;
     }
 }
+
+class Category
+{
+    var $form_presentation = [
+        "name" => ["type"=>"text", "label_text" => "Наименование", "id" => "name", "r_" => "required", "sp_attr" => "autofocus"]
+    ]; 
+}
+
+class Lesson
+{
+    var $form_presentation = [
+        "name" => ["type"=>"text", "label_text" => "Наименование", "id" => "name", "r_" => "required", "sp_attr" => "autofocus"],
+        "description" => ["type"=>"text", "label_text" => "Описание", "id" => "description", "r_" => "required"]
+    ]; 
+}
 ?>

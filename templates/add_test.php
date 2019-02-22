@@ -1,4 +1,5 @@
 <!-- Добавляем тест -->
+<?php if (isset($_SESSION['login']) && $_SESSION['role'] == 0): ?>
 <div class="row">
     <div class="col-md-12">
         <div class="box box-default">
@@ -66,3 +67,4 @@
         </div>
     </div>
 </div>
+<?php endif; ?>

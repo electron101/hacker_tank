@@ -3,7 +3,7 @@
 //Подлючение базового файла шаблона и подгрузка основного контента
 /*
 	Пример:
-	$act = isset($_GET['act']) ? $_GET['act'] : "";
+	$act = isset($input['act']) ? $input['act'] : "";
 	switch($act)
 	{
 		case "Some variable":
@@ -13,11 +13,10 @@
 			SomeFunction();
 			break;
 	}
-*/
+ */
 $act = isset($input['act']) ? $input['act'] : "";
-	
-switch($act)
-{
+
+switch ($act) {
 	case "Test":
 		load_test();
 		break;
@@ -57,12 +56,48 @@ switch($act)
 	case "load_start":
 		loadStart($str);
 		break;
+	case "admin_categories":
+		admin_categories();
+		break;
+	case "category_add":
+		category_add();
+		break;
+	case "lesson_add":
+		lesson_add();
+		break;
+	case "add_new_category":
+		add_new_category();
+		break;
+	case "add_new_lesson":
+		add_new_lesson();
+		break;
+	case "edit_category":
+		edit_category();
+		break;
+	case "edit_lesson":
+		edit_lesson();
+		break;
+	case "update_category":
+		update_category();
+		break;
+	case "update_lesson":
+		update_lesson();
+		break;
+	case "admin_lessons":
+		admin_lessons();
+		break;
 	/** Загружаем тесты */
 	case "admin_tests":
 		admin_tests();
 		break;
 	case "test_add":
 		test_add();
+		break;
+	case "edit_test":
+		edit_test();
+		break;
+	case "update_test":
+		update_test();
 		break;
 	case "save_test":
 		save_test();
@@ -73,6 +108,16 @@ switch($act)
 		break;
 	case "del_users":
 		DeleteConfirmation();
+		break;
+	case "del_category":
+		DeleteConfirmation();
+		break;
+	case "del_lesson":
+		DeleteConfirmation();
+		break;
+	// подтверждение удаления
+	case "confirm_delete":
+		Delete();
 		break;
 	default:
 		loadStart($str);
