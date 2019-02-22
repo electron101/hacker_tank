@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Хост: localhost
--- Время создания: Дек 21 2018 г., 16:56
+-- Время создания: Фев 22 2019 г., 16:53
 -- Версия сервера: 5.7.18
 -- Версия PHP: 7.1.5
 
@@ -38,7 +38,9 @@ CREATE TABLE `category` (
 --
 
 INSERT INTO `category` (`id_category`, `name`) VALUES
-(1, 'Легко');
+(1, 'Легко'),
+(2, 'Средне'),
+(3, 'Сложно');
 
 -- --------------------------------------------------------
 
@@ -92,8 +94,7 @@ CREATE TABLE `lessons` (
 --
 
 INSERT INTO `lessons` (`id_lesson`, `name`, `description`) VALUES
-(1, 'arrays', 'Массивы'),
-(2, 'test', 'Тест');
+(1, 'arrays', 'Массивы');
 
 -- --------------------------------------------------------
 
@@ -113,8 +114,7 @@ CREATE TABLE `polzov` (
 --
 
 INSERT INTO `polzov` (`id_polzov`, `name`, `pas`, `role`) VALUES
-(1, 'admin', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', 0),
-(3, 'stas', '123', 1);
+(1, 'admin', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', 0);
 
 -- --------------------------------------------------------
 
@@ -139,6 +139,7 @@ CREATE TABLE `statistic` (
 CREATE TABLE `task` (
   `id_task` int(11) NOT NULL,
   `name` varchar(255) NOT NULL,
+  `rus_name` varchar(255) DEFAULT NULL,
   `text` text NOT NULL,
   `id_category` int(11) NOT NULL,
   `tex_min` varchar(255) NOT NULL,
@@ -149,9 +150,8 @@ CREATE TABLE `task` (
 -- Дамп данных таблицы `task`
 --
 
-INSERT INTO `task` (`id_task`, `name`, `text`, `id_category`, `tex_min`, `id_lesson`) VALUES
-(1, 'cyclic_rotation', '<p>\r\n Задан массив A, состоящий из N целых чисел. Вращение массива означает, что каждый элемент смещается вправо на один индекс, а последний элемент массива перемещается на первое место. Например, поворот массива A = [3, 8, 9, 7, 6] равен [6, 3, 8, 9, 7] (элементы смещены вправо на один индекс, а 6 - на первое место).\r\n</p>\r\n<p>\r\nЦель состоит в том, чтобы вращать массив A K раз; то есть каждый элемент A будет сдвинут вправо K раз.\r\n</p>\r\n<p>\r\nНапишите функцию:\r\n</p>\r\n<p style = \"font-family: consolas;\"> class Solution {public int [] solution (int [] A, int K); } </p>\r\n<p>\r\nчто, учитывая массив A, состоящий из N целых чисел и целого числа K, возвращает массив A, повернутый K раз.\r\n</p>\r\n<p>\r\nНапример, учитывая\r\n</p>\r\n<p>\r\n    A = [3, 8, 9, 7, 6] <br>\r\n    К = 3\r\n</p>\r\n<p>\r\nфункция должна вернуть [9, 7, 6, 3, 8]. Три поворота были сделаны:\r\n</p>\r\n<p>\r\n    [3, 8, 9, 7, 6] -> [6, 3, 8, 9, 7] <br>\r\n    [6, 3, 8, 9, 7] -> [7, 6, 3, 8, 9] <br>\r\n    [7, 6, 3, 8, 9] -> [9, 7, 6, 3, 8] <br>\r\n</p>\r\n<p>\r\nДля другого примера, приведенного\r\n</p>\r\n<p>\r\n    A = [0, 0, 0] <br>\r\n    К = 1\r\n</p>\r\n<p>\r\nфункция должна вернуть [0, 0, 0]\r\n</p>\r\nДано\r\n<p>\r\n    A = [1, 2, 3, 4] <br>\r\n    К = 4\r\n</p>\r\n<p>\r\nфункция должна вернуть [1, 2, 3, 4]\r\n</p>\r\n<p>\r\nПредположим, что:\r\n</p>\r\n<p>\r\nN и K - целые числа в диапазоне [0..100];\r\nкаждый элемент массива A является целым числом в диапазоне [−1,000..1,000].\r\nВ вашем решении сосредоточьтесь на правильности. Эффективность вашего решения не будет в центре внимания оценки.\r\n</p>', 1, 'Циклическое вращение', 1),
-(2, 'Test_task', 'just for test', 1, 'test...', 2);
+INSERT INTO `task` (`id_task`, `name`, `rus_name`, `text`, `id_category`, `tex_min`, `id_lesson`) VALUES
+(1, 'cyclic_rotation', 'Циклическое вращение', '<p>&nbsp;Задан массив A, состоящий из N целых чисел. Вращение массива означает, что каждый элемент смещается вправо на один индекс, а последний элемент массива перемещается на первое место. Например, поворот массива A = [3, 8, 9, 7, 6] равен [6, 3, 8, 9, 7] (элементы смещены вправо на один индекс, а 6 - на первое место).</p>\r\n\r\n<p>Цель состоит в том, чтобы вращать массив A K раз; то есть каждый элемент A будет сдвинут вправо K раз.</p>\r\n\r\n<p>Напишите функцию:</p>\r\n\r\n<p>class Solution {public int [] solution (int [] A, int K); }</p>\r\n\r\n<p>что, учитывая массив A, состоящий из N целых чисел и целого числа K, возвращает массив A, повернутый K раз.</p>\r\n\r\n<p>Например, учитывая</p>\r\n\r\n<p>&nbsp;&nbsp;&nbsp;&nbsp;A = [3, 8, 9, 7, 6]<br />\r\n&nbsp;&nbsp;&nbsp;&nbsp;К = 3</p>\r\n\r\n<p>функция должна вернуть [9, 7, 6, 3, 8]. Три поворота были сделаны:</p>\r\n\r\n<p>&nbsp;&nbsp;&nbsp;&nbsp;[3, 8, 9, 7, 6] -&gt; [6, 3, 8, 9, 7]<br />\r\n&nbsp;&nbsp;&nbsp;&nbsp;[6, 3, 8, 9, 7] -&gt; [7, 6, 3, 8, 9]<br />\r\n&nbsp;&nbsp;&nbsp;&nbsp;[7, 6, 3, 8, 9] -&gt; [9, 7, 6, 3, 8]</p>\r\n\r\n<p>Для другого примера, приведенного</p>\r\n\r\n<p>&nbsp;&nbsp;&nbsp;&nbsp;A = [0, 0, 0]<br />\r\n&nbsp;&nbsp;&nbsp;&nbsp;К = 1</p>\r\n\r\n<p>функция должна вернуть [0, 0, 0]</p>\r\n\r\n<p>Дано</p>\r\n\r\n<p>&nbsp;&nbsp;&nbsp;&nbsp;A = [1, 2, 3, 4]<br />\r\n&nbsp;&nbsp;&nbsp;&nbsp;К = 4</p>\r\n\r\n<p>функция должна вернуть [1, 2, 3, 4]</p>\r\n\r\n<p>Предположим, что:</p>\r\n\r\n<p>N и K - целые числа в диапазоне [0..100]; каждый элемент массива A является целым числом в диапазоне [&minus;1,000..1,000]. В вашем решении сосредоточьтесь на правильности. Эффективность вашего решения не будет в центре внимания оценки.</p>\r\n', 1, 'Поверните массив вправо на указанное количество шагов.', 1);
 
 -- --------------------------------------------------------
 
@@ -171,8 +171,8 @@ CREATE TABLE `task_lang` (
 --
 
 INSERT INTO `task_lang` (`id_task_lang`, `id_task`, `id_lang`, `template_link_folder_code`) VALUES
-(1, 1, 1, 'data/code_templates/cyclic_rotation/c/'),
-(2, 1, 2, 'data/code_templates/cyclic_rotation/sharp/');
+(16, 1, 1, 'data/code_templates/cyclic_rotation/c/'),
+(17, 1, 2, 'data/code_templates/cyclic_rotation/sharp/');
 
 --
 -- Индексы сохранённых таблиц
@@ -239,7 +239,7 @@ ALTER TABLE `task_lang`
 -- AUTO_INCREMENT для таблицы `category`
 --
 ALTER TABLE `category`
-  MODIFY `id_category` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id_category` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 --
 -- AUTO_INCREMENT для таблицы `done_task`
 --
@@ -254,12 +254,12 @@ ALTER TABLE `lang`
 -- AUTO_INCREMENT для таблицы `lessons`
 --
 ALTER TABLE `lessons`
-  MODIFY `id_lesson` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id_lesson` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 --
 -- AUTO_INCREMENT для таблицы `polzov`
 --
 ALTER TABLE `polzov`
-  MODIFY `id_polzov` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id_polzov` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 --
 -- AUTO_INCREMENT для таблицы `statistic`
 --
@@ -269,12 +269,12 @@ ALTER TABLE `statistic`
 -- AUTO_INCREMENT для таблицы `task`
 --
 ALTER TABLE `task`
-  MODIFY `id_task` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id_task` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 --
 -- AUTO_INCREMENT для таблицы `task_lang`
 --
 ALTER TABLE `task_lang`
-  MODIFY `id_task_lang` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id_task_lang` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 --
 -- Ограничения внешнего ключа сохраненных таблиц
 --
