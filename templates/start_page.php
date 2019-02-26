@@ -8,7 +8,7 @@
                         <h3 class="box-title"><?=$context['data'][0]['description']?></h3>
                     </div>
                     <div class="box-body no-padding">
-                        <table class="table table-condensed" id="task_list">
+                        <table class="table table-condensed" id="task_list" style="padding-bottom: 10px;">
                             <tr>
                                 <th style="width: 2px"></th>
                                 <th></th>
