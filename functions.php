@@ -1,7 +1,7 @@
 <?php
 
 if (!extension_loaded('zip')) {
-	echo '<script>alert("Не загружено расширение ZIP!")</script>';
+	echo '<script>alert("Не загружено расширение ZIP! Ничего работать не будет!")</script>';
 }
 
 /** Класс отрисовки страниц */
