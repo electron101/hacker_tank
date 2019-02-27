@@ -8,7 +8,7 @@ $(document).ready(function () {
         if (lang == "sharp")
             cEditor.setOption("mode", "text/x-csharp");
 
-        task_name = $('#task_name').val;
+        task_name = $('#task_name').val();
         // подгружаем файл сниппета
         $.ajax({
             url: "",

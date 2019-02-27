@@ -1,6 +1,6 @@
 using System;
 
-namespace cyclic_rotation
+namespace perm_missing_elem
 {
 	public enum category_test {
 		EXAMPLE,
@@ -43,20 +43,6 @@ namespace cyclic_rotation
 	
 	static public class General
 	{
-		/* Сравнение двух массивов. Возвращаемое значение: 
-		 * 0   - если массивы равны
-		 * 1   - если массивы не равны
-		 */
-		public static int cmp_arr(int[] one, int[] two, int N) {
-			// int i;
-
-			for (int i = 0; i < N; ++i) {
-				if (one[i] != two[i])
-					return 1;
-			}
-			return 0;
-		}
-
 		/* Печать массива. Выходной формат [3, 8, 9, 7, 6] */
 		public static void print_arr(int[] A, int N) {
 			int i;
@@ -85,14 +71,11 @@ namespace cyclic_rotation
 		 * 1 | double | two elements, K <= N | 0.001 | 0 | WRONG ANSWER (got [-1000, 32765] expected [-1000, 5]) |
 		 * 0 | example3 | third example test | 1 | OK
 		 */
-		public static void out_to_console(int[] result2, test_struct tests, 
+		public static void out_to_console(int result, test_struct tests, 
 				double time_spent) {
 			int ok;
-
-			ok =  cmp_arr(tests.R, result2, tests.N);
-
-			/* инверсия результата, 0 - тест не пройден, 1 - тест пройден */
-			if (ok == 0)
+			
+			if (tests.R == result)
 				ok = 1;
 			else 
 				ok = 0;
@@ -109,9 +92,9 @@ namespace cyclic_rotation
 				Console.Write("OK");
 			else {
 				Console.Write("WRONG ANSWER (got ");
-				print_arr (result2, result2.Length);
+				Console.Write("{0}", result);
 				Console.Write(" expected ");
-				print_arr (tests.R, tests.N);
+				Console.Write("{0}", tests.R);
 				Console.Write(")");
 			}
 			Console.Write (" |");

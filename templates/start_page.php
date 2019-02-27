@@ -24,16 +24,16 @@
                                         echo 'style="background-color: green;"';
                                 }
                                 ?>></td>
-                                <td>
+                                <td style="vertical-align: middle;">
                                     <?=$context['data'][$i]['rus_name']?>
                                     <br>
                                     <small style="color: grey;"><?=$context['data'][$i]['tex_min']?></small>
                                 </td>
-                                <td><?=$context['data'][$i]['name']?></td>
-                                <td><span class="badge bg-red">0%</span></td>
+                                <td style="vertical-align: middle;"><?=$context['data'][$i]['name']?></td>
+                                <td style="vertical-align: middle;"><span class="badge bg-red">0%</span></td>
                                 <td>
-                                    <a href="" class="btn btn-block btn-default btn-xs">Просмотр</a>
-                                    <a href="?act=code&task_name=<?=$context['data'][$i]['task_name']?>&id=<?=$context['data'][$i]['id_task']?>" class="btn btn-block btn-primary btn-xs">Старт</a>
+                                    <a href="" class="btn btn-block btn-default btn-md">Просмотр</a>
+                                    <a href="?act=code&task_name=<?=$context['data'][$i]['task_name']?>&id=<?=$context['data'][$i]['id_task']?>" class="btn btn-block btn-primary btn-md">Старт</a>
                                 </td>
                             </tr>
                             <?php endfor; ?>
