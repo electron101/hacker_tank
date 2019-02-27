@@ -13,23 +13,6 @@ $(document).ready(function () {
         $('.select2').select()
     });
 
-
-    $('#apply, #run').on('click', function (e) {
-        e.preventDefault();
-        var val = ($(this).attr('value'));
-        var code = cEditor.getValue();
-        var lang = ($('#lang').val());
-        var task_name = $('#task_name').val();
-        $.ajax({
-            url: "",
-            type: "POST",
-            data: { 'act': "compile_this", 'val': val, 'code': code, 'lang': lang, 'task_name': task_name },
-            cache: false
-        }).done(function (msg) {
-            alert(msg);
-        });
-    });
-
     /** РЕГИСТРАЦИЯ */
     $('#do_reg').click(function (event) {
         event.preventDefault();
