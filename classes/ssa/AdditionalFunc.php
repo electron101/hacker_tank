@@ -60,5 +60,75 @@ class AddFunc
 
         return $zip->close();
     }
+
+    /** Посчитать кол-во директорий */
+    static function countDir($dir)
+    {
+        $i = 0;
+        $dir_list = scandir($dir);
+        foreach ($dir_list as $d) {
+            if ($d != '.' && $d != '..') {
+                $i++;
+            }
+        }
+        return $i;
+    }
+
+    /** Копирование директорий */
+    static function copydirect($source, $dest, $over = false)
+    {
+        if (!is_dir($dest))
+        mkdir($dest);
+        if ($handle = opendir($source)) {
+            while (false !== ($file = readdir($handle))) {
+                if ($file != '.' && $file != '..') {
+                    $path = $source . '/' . $file;
+                    if (is_file($path)) {
+                        if (!is_file($dest . '/' . $file || $over))
+                        if (!@copy($path, $dest . '/' . $file)) {
+                            echo "('.$path.') Ошибка!!! ";
+                        }
+                    } elseif (is_dir($path)) {
+                        if (!is_dir($dest . '/' . $file))
+                        mkdir($dest . '/' . $file);
+                        self::copydirect($path, $dest . '/' . $file, $over);
+                    }
+                }
+            }
+            closedir($handle);
+        }
+    }
+
+    // удалить существующий файл
+    static function delete_file($filename)
+    {
+        if (file_exists($filename)) {
+            unlink($filename);
+        }
+    }
+
+    // удаление директории
+    static function delete_directory($dir)
+    {
+        if (!file_exists($dir)) {
+            return true;
+        }
+
+        if (!is_dir($dir)) {
+            return unlink($dir);
+        }
+
+        foreach (scandir($dir) as $item) {
+            if ($item == '.' || $item == '..') {
+                continue;
+            }
+
+            if (!self::delete_directory($dir . DIRECTORY_SEPARATOR . $item)) {
+                return false;
+            }
+        }
+
+        return rmdir($dir);
+    }
 }
  

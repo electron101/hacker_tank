@@ -67,7 +67,7 @@ function loadBase()
 
     /*Корпирование директории*/
     $dir = "data/users/" . $_SESSION['login'] . "/" . $task_name;
-    copydirect("data/code_templates/" . $task_name, $dir, 1);
+    AddFunc::copydirect("data/code_templates/" . $task_name, $dir, 1);
 
     $query = "Select rus_name, tex_min, text, name, id_task From task Where id_task = " . $id;
     $context['bd'] = LoadDataFromDB($query);
@@ -374,7 +374,7 @@ function save_test()
         if ($res === true) {
             $zip->extractTo($uploaddir);
             $zip->close();
-            delete_file($uploadfile);
+            AddFunc::delete_file($uploadfile);
         }
     }
     //код на шарпе
@@ -387,7 +387,7 @@ function save_test()
         if ($res === true) {
             $zip->extractTo($uploaddir);
             $zip->close();
-            delete_file($uploadfile2);
+            AddFunc::delete_file($uploadfile2);
         }
     }
 
@@ -464,7 +464,7 @@ function update_test()
             $c_params = array($id_task);
             $c_types = 'i';
             bd_interaction($c_del_quer, $c_params, $c_types);
-            delete_directory(substr($c_files['data'][0]['template_link_folder_code'], 0, -1));
+            AddFunc::delete_directory(substr($c_files['data'][0]['template_link_folder_code'], 0, -1));
         } else {
             //Обновляем файлы в папках и в таблице
             if (!file_exists("data/code_templates/" . $name . "/"))
@@ -479,7 +479,7 @@ function update_test()
                 if ($res === true) {
                     $zip->extractTo($uploaddir);
                     $zip->close();
-                    delete_file($uploadfile);
+                    AddFunc::delete_file($uploadfile);
 
                     $check_query = "SELECT count(*) as counter FROM task_lang WHERE id_lang = 1 AND id_task = " . $id_task;
                     $d1 = LoadDataFromDB($check_query);
@@ -507,7 +507,7 @@ function update_test()
             $csharp_params = array($id_task);
             $csharp_types = 'i';
             bd_interaction($csharp_del_quer, $csharp_params, $csharp_types);
-            delete_directory(substr($csharp_files['data'][0]['template_link_folder_code'], 0, -1));
+            AddFunc::delete_directory(substr($csharp_files['data'][0]['template_link_folder_code'], 0, -1));
         } else {
             //Обновляем файлы в папках и в таблице
             if (!file_exists("data/code_templates/" . $name . "/"))
@@ -522,7 +522,7 @@ function update_test()
                 if ($res === true) {
                     $zip->extractTo($uploaddir);
                     $zip->close();
-                    delete_file($uploadfile);
+                    AddFunc::delete_file($uploadfile);
 
                     $check_query = "SELECT count(*) as counter FROM task_lang WHERE id_lang = 2 AND id_task = " . $id_task;
                     $d1 = LoadDataFromDB($check_query);
@@ -543,8 +543,8 @@ function update_test()
     }
 
     $dir = "data/code_templates/" . $name . "/";
-    if (countDir($dir) == 0) {
-        delete_directory(substr($dir, 0, -1));
+    if (AddFunc::countDir($dir) == 0) {
+        AddFunc::delete_directory(substr($dir, 0, -1));
     }
 
     admin_tests();
@@ -567,7 +567,7 @@ function download_file()
     readfile($destination);
 
     if (file_exists($destination))
-    delete_file($destination);
+    AddFunc::delete_file($destination);
 }
 
 function del_file()
@@ -579,10 +579,10 @@ function del_file()
 
     $dir = $path . $name;
 
-    delete_directory($dir);
+    AddFunc::delete_directory($dir);
 
-    if (countDir($path) == 0) {
-        delete_directory(substr($path, 0, -1));
+    if (AddFunc::countDir($path) == 0) {
+        AddFunc::delete_directory(substr($path, 0, -1));
     }
     go_back(-1);
 }
@@ -673,50 +673,13 @@ function Del_Test($id)
     $types2 = 'i';
     bd_interaction($query_del2, $params2, $types2);
 
-    delete_directory($dir);
+    AddFunc::delete_directory($dir);
 
     return true;
 }
 /** АДМИНКА КОНЕЦ */
 
-/***  ДЕЙСТВИЯ С ФАЙЛАМИ И ДИРЕКТОРИЯМИ                                                         *****************/
-/** Посчитать кол-во директорий */
-function countDir($dir)
-{
-    $i = 0;
-    $dir_list = scandir($dir);
-    foreach ($dir_list as $d) {
-        if ($d != '.' && $d != '..') {
-            $i++;
-        }
-    }
-    return $i;
-}
-
-/** КОПИРОВАНИЕ ДИРЕКТОРИЙ */
-function copydirect($source, $dest, $over = false)
-{
-    if (!is_dir($dest))
-    mkdir($dest);
-    if ($handle = opendir($source)) {
-        while (false !== ($file = readdir($handle))) {
-            if ($file != '.' && $file != '..') {
-                $path = $source . '/' . $file;
-                if (is_file($path)) {
-                    if (!is_file($dest . '/' . $file || $over))
-                    if (!@copy($path, $dest . '/' . $file)) {
-                        echo "('.$path.') Ошибка!!! ";
-                    }
-                } elseif (is_dir($path)) {
-                    if (!is_dir($dest . '/' . $file))
-                    mkdir($dest . '/' . $file);
-                    copydirect($path, $dest . '/' . $file, $over);
-                }
-            }
-        }
-        closedir($handle);
-    }
-}
+/***  ДЕЙСТВИЯ С ФАЙЛАМИ И ДИРЕКТОРИЯМИ */
 
 //создание файловой структуры пользовательских папок
 function create_file_structure($name, $loc)
@@ -726,38 +689,6 @@ function create_file_structure($name, $loc)
             mkdir("data/users/$name", 777);
             break;
     }
-}
-
-// удалить существующий файл
-function delete_file($filename)
-{
-    if (file_exists($filename)) {
-        unlink($filename);
-    }
-}
-
-// удаление директории
-function delete_directory($dir)
-{
-    if (!file_exists($dir)) {
-        return true;
-    }
-
-    if (!is_dir($dir)) {
-        return unlink($dir);
-    }
-
-    foreach (scandir($dir) as $item) {
-        if ($item == '.' || $item == '..') {
-            continue;
-        }
-
-        if (!delete_directory($dir . DIRECTORY_SEPARATOR . $item)) {
-            return false;
-        }
-    }
-
-    return rmdir($dir);
 }
 /***  ДЕЙСТВИЯ С ФАЙЛАМИ И ДИРЕКТОРИЯМИ КОНЕЦ   */
 
