@@ -60,7 +60,6 @@ namespace cyclic_rotation
 		}
 	}
 }
-
 // you can also use other imports, for example:
 // using System.Collections.Generic;
 
@@ -70,27 +69,29 @@ namespace cyclic_rotation
 class Solution {
     public int[] solution(int[] A, int K) {
         // write your code in C# 6.0 with .NET 4.5 (Mono)
-      if (A.Length == K || A.Length == 0)
-            return A;
-
-        var actualShifts = A.Length > K ? K : K % A.Length;
-
-        var initial = new int[A.Length];
-        A.CopyTo(initial, 0);
-        
-        for(int i=0; i<actualShifts; i++)
-        {
-            var shifted = new int[A.Length];
-            shifted[0] = initial[A.Length - 1];
-
-            for(int j=1; j<A.Length; j++)
+      K = K+1;
+       int l = A.Length;
+            int start = l - K;
+            int [] outA = new int [l];
+            int j = 0;
+            if (l == 0 || K == 0)
             {
-                shifted[j] = initial[j - 1];
+                return A;
             }
-
-            initial = shifted;
-        }
-
-        return initial;
+            if (start < 0)
+            {
+                start = -(start - 1);
+            }
+            for (int i = start; i < l; i++)
+            {
+                outA[j] = A[i];
+                j++;
+            }
+            for (int m = 0; m < start; m++)
+            {
+                outA[j] = A[m];
+                j++;
+            }
+            return outA;
     }
 }

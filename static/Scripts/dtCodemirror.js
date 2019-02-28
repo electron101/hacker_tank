@@ -12,7 +12,17 @@ $(document).ready(function () {
             data: { 'act': "compile_this", 'val': val, 'code': code, 'lang': lang, 'task_name': task_name },
             cache: false
         }).done(function (msg) {
-            alert(msg);
+            if (msg.indexOf("Успешная") != -1)
+            {
+                var pos = msg.indexOf("Успешная");
+                $("#output").append("<p style='color: #00aa00;'>Успешная компиляция</p>")
+                var str = msg.substring(0, pos);
+                $("#output").append(msg);
+            }
+            else
+            {
+                $("#output").append(msg);
+            }
         });
     });
     /** CODEMIRROR                                                                     ****/

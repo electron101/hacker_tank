@@ -20,5 +20,45 @@ class AddFunc
         );
         return str_replace($rus, $lat, $str);
     }
+
+    // очистить существующий файл
+    static function clean_file($filename)
+    {
+        if (file_exists($filename)) {
+            file_put_contents($filename, "");
+        }
+    }
+
+    /** Упаковать файл в архив */
+    static function toZip($destination, $dir)
+    {
+        $dir = str_replace('\\', '/', realpath($dir));
+
+        $zip = new ZipArchive();
+        if (!$zip->open($destination, ZIPARCHIVE::CREATE)) {
+            return false;
+        }
+
+        if (is_dir($dir) === true) {
+            $files = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($dir), RecursiveIteratorIterator::SELF_FIRST);
+
+            foreach ($files as $file) {
+                $file = str_replace('\\', '/', $file);
+                if (in_array(substr($file, strrpos($file, '/') + 1), array('.', '..')))
+                continue;
+
+                $file = realpath($file);
+                $file = str_replace('\\', '/', $file);
+
+                if (is_dir($file) === true) {
+                    $zip->addEmptyDir(str_replace($dir . '/', '', $file . '/'));
+                } else if (is_file($file) === true) {
+                    $zip->addFromString(str_replace($dir . '/', '', $file), file_get_contents($file));
+                }
+            }
+        }
+
+        return $zip->close();
+    }
 }
 ?>

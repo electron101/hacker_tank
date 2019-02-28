@@ -71,7 +71,7 @@
                     </div>
                     <div class="col-md-12">
                         <div class="col-md-6" style="background-color: #eeeeee; min-height: 40px; padding: 2px;"><b>Вывод</b></div>
-                        <div class="col-md-6" style="background-color: #eeeeee; min-height: 40px;  padding: 2px;"><button type="button" class="btn btn-success" id="run" value="example" style="margin-left:15px; float: right;"><i class="fa fa-play"></i> Запуск</button></div>
+                        <div class="col-md-6" style="background-color: #eeeeee; min-height: 40px;  padding: 2px;"><button type="button" class="btn btn-success" id="run" value="example" style="margin-left:15px; margin-right: 15px; float: right;"><i class="fa fa-play"></i> Запуск</button></div>
                     </div>
                     <!-- Вывод результатов -->
                     <div class="col-md-12" id="output"></div>
