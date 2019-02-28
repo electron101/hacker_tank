@@ -22,6 +22,10 @@
                                 {
                                     case 1:
                                         echo 'style="background-color: green;"';
+                                    case 2:
+                                        echo 'style="background-color: orange;"';
+                                    case 3:
+                                        echo 'style="background-color: darkred;"';
                                 }
                                 ?>></td>
                                 <td style="vertical-align: middle;">

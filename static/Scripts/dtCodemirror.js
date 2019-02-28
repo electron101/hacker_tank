@@ -12,15 +12,13 @@ $(document).ready(function () {
             data: { 'act': "compile_this", 'val': val, 'code': code, 'lang': lang, 'task_name': task_name },
             cache: false
         }).done(function (msg) {
-            if (msg.indexOf("Успешная") != -1)
-            {
+            if (msg.indexOf("Успешная") != -1) {
                 var pos = msg.indexOf("Успешная");
                 $("#output").append("<p style='color: #00aa00;'>Успешная компиляция</p>")
                 var str = msg.substring(0, pos);
                 $("#output").append(msg);
             }
-            else
-            {
+            else {
                 $("#output").append(msg);
             }
         });
@@ -39,7 +37,7 @@ $(document).ready(function () {
         $.ajax({
             url: "",
             type: "POST",
-            data: { 'act': 'change_lang', 'lang': lang , 'task_name': task_name},
+            data: { 'act': 'change_lang', 'lang': lang, 'task_name': task_name },
             cache: false
         }).done(function (answ) {
             cEditor.setValue(answ);
