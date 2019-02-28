@@ -22,11 +22,13 @@ namespace perm_missing_elem
 			for (i = 0; i < 1; ++i) {
 				result = s.solution(tests[i].A);
 
+				Console.Write("| ");
+				
 				Console.Write("Example test: (");
 				General.print_arr(tests[i].A, tests[i].N);
 				Console.Write(")");
 				
-				Console.Write("\n");
+				Console.Write(" | ");
 
 				/* функция проверки результата */
 				if ( tests[i].R == result )
@@ -35,8 +37,10 @@ namespace perm_missing_elem
 					Console.Write("WRONG ANSWER (got {0}", result);
 					Console.Write(" expected {0}", tests[i].R);
 					Console.Write(")");
+					Console.Write(" | ");
 				}
 
+				Console.Write(" | ");
 				Console.Write("\n");
 				Console.Write("\n");
 			}

@@ -34,11 +34,13 @@ int main()
 	for (i = 0; i < COUNT_EXAMPLE_TEST; ++i) {
 		result2 = solution(tests[i].A, tests[i].N, tests[i].K);
 		
+		printf ("| ");
+		
 		printf ("Example test: (");
 		print_arr(tests[i].A, tests[i].N);
 		printf (", %d)", tests[i].K);
 		
-		printf ("\n");
+		printf (" | ");
 
 		/* функция проверки результата */
 		if ( cmp_arr(tests[i].R, result2.A, tests[i].N) == 0 )
@@ -49,8 +51,10 @@ int main()
 			printf (" expected ");
 			print_arr (tests[i].R, tests[i].N);
 			printf (")");
+			printf (" | ");
 		}
 		
+		printf (" | ");
 		printf ("\n");
 		printf ("\n");
 	}

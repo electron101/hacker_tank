@@ -16,11 +16,13 @@ int main()
 	for (i = 0; i < COUNT_EXAMPLE_TEST; ++i) {
 		result = solution(tests[i].A, tests[i].N);
 		
+		printf ("| ");
+		
 		printf ("Example test: (");
 		print_arr(tests[i].A, tests[i].N);
 		printf (")");
 		
-		printf ("\n");
+		printf (" | ");
 
 		/* функция проверки результата */
 		if ( tests[i].R == result )
@@ -29,8 +31,10 @@ int main()
 			printf ("WRONG ANSWER (got %d", result);
 			printf (" expected %d", tests[i].R);
 			printf (")");
+			printf (" | ");
 		}
 		
+		printf (" | ");
 		printf ("\n");
 		printf ("\n");
 	}
