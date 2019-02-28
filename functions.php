@@ -399,7 +399,7 @@ function save_test()
         $sel_query = 'Select id_task From task ORDER BY id_task desc limit 1';
         $data = LoadDataFromDB($sel_query);
         $id_task = $data['data'][0]['id_task'];
-        //Добавляем пути к файла в бд
+        //Добавляем пути к файлам в бд
         $c_query = "Insert Into task_lang (id_task, id_lang, template_link_folder_code) VALUES (?, 1, ?)";
         $c_params = array($id_task, $c_link);
         $c_types = 'is';
@@ -679,8 +679,6 @@ function Del_Test($id)
 }
 /** АДМИНКА КОНЕЦ */
 
-/***  ДЕЙСТВИЯ С ФАЙЛАМИ И ДИРЕКТОРИЯМИ */
-
 //создание файловой структуры пользовательских папок
 function create_file_structure($name, $loc)
 {
@@ -690,7 +688,6 @@ function create_file_structure($name, $loc)
             break;
     }
 }
-/***  ДЕЙСТВИЯ С ФАЙЛАМИ И ДИРЕКТОРИЯМИ КОНЕЦ   */
 
 /** ОПЕРАЦИИ С БД */
 // выборка из бд
