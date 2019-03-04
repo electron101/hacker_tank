@@ -47,6 +47,9 @@ switch ($act) {
 	case "compile_this":
 		compile_this();
 		break;
+	case "apply_this":
+		apply_this();
+		break;
 	case "change_lang":
 		change_lang();
 		break;

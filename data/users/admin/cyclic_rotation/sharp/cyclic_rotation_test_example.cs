@@ -37,11 +37,13 @@ namespace cyclic_rotation
 				result2 = s.solution(tests[i].A, 
 						tests[i].K);
 
+				Console.Write("| ");
+				
 				Console.Write("Example test: (");
 				General.print_arr(tests[i].A, tests[i].N);
 				Console.Write(", {0})", tests[i].K);
 				
-				Console.Write("\n");
+				Console.Write(" | ");
 
 				/* функция проверки результата */
 				if ( General.cmp_arr(tests[i].R, result2, tests[i].N) == 0 )
@@ -52,8 +54,10 @@ namespace cyclic_rotation
 					Console.Write(" expected ");
 					General.print_arr (tests[i].R, tests[i].N);
 					Console.Write(")");
+					Console.Write(" | ");
 				}
 
+				Console.Write(" | ");
 				Console.Write("\n");
 				Console.Write("\n");
 			}
