@@ -105,9 +105,26 @@ $(document).ready(function () {
             var percent = (count_of_correct_answers / total_count) * 100;
             var answer = "<h2>РЕЗУЛЬТАТ: " + percent + "%</h2>"
             $("#output").append(answer + "<hr>");
+            Save_statistic(percent);
             console.log(result_array);
         });
     });
+
+    /** Сохранение статистики пользователя */
+    function Save_statistic(percent)
+    {
+        var lang = ($('#lang').val());
+        var id_task = $('#id_task').val();
+        $.ajax({
+            url: "",
+            type: "POST",
+            data: { 'act': "save_statistic", 'percent': percent, 'lang': lang, 'id_task': id_task },
+            cache: false,
+            async: true
+        }).done(function (msg) {
+            console.log(msg);
+        })
+    }
 
     /** CODEMIRROR                                                                     ****/
     /** МЕНЯЕМ ЯЗЫК И ПОДКЛЮЧАЕМ НУЖНЫЙ СНИППЕТ */

@@ -50,6 +50,9 @@ switch ($act) {
 	case "apply_this":
 		apply_this();
 		break;
+	case "save_statistic":
+		save_statistic();
+		break;
 	case "change_lang":
 		change_lang();
 		break;

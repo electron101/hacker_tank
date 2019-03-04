@@ -74,7 +74,7 @@ function loadBase()
 
     $snippet = "data/code_templates/" . $task_name . "/c/org_snippet";
     if (file_exists($snippet))
-    $context['code'] = file_get_contents($snippet);
+        $context['code'] = file_get_contents($snippet);
     $render = new Render("templates/main.php", $context, "standalone");                         //~standalone			
     return $render->renderPage();
 }
@@ -118,6 +118,28 @@ function compile_this()
     $result = $Compiler->compile();
     echo $result['message'];
     echo $result['output'];
+    return;
+}
+
+/** Сохранение пользовательской статистики */
+function save_statistic()
+{
+    $input = $GLOBALS['input'];
+    $percent = isset($input['percent']) ? $input['percent'] : "";
+    $lang = isset($input['lang']) ? $input['lang'] : "";
+    $id_task = isset($input['id_task']) ? $input['id_task'] : "";
+
+    $query_l = "SELECT id_lang FROM lang Where name = '".$lang."'";
+    $context = LoadDataFromDB($query_l);
+    $id_lang = $context['data'][0]['id_lang'];
+
+    $query = "INSERT INTO statistic (id_polzov, id_task, percent, id_lang) VALUES (?,?,?,?)";
+    $params = array($_SESSION['id'], $id_task, $percent, $id_lang);
+    $types = "iiii";
+
+    $res = bd_interaction($query, $params, $types);
+
+    echo $res;
     return;
 }
 

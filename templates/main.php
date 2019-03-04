@@ -49,6 +49,7 @@
                                     <option value="1">VIM</option>
                                 </select>
                                 <input type="hidden" id="task_name" name="task_name" value="<?= $context['bd']['data'][0]['name'] ?>">
+                                <input type="hidden" id="id_task" name="task_name" value="<?= $context['bd']['data'][0]['id_task'] ?>">
                             </td>
                             <td>
                                 <select name="lang" id="lang" class="form-control select" style="width: 120px; margin-left:15px;">
