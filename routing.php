@@ -41,6 +41,9 @@ switch ($act) {
 	case "do_login":
 		do_login();
 		break;
+	case "lk":
+		show_lk();
+		break;
 	case "code":
 		loadBase();
 		break;

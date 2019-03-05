@@ -69,6 +69,20 @@ function load_task_list_to_main_content($str)
     return $render->renderPage();
 }
 
+/** ЛИЧНЫЙ КАБИНЕТ */
+function show_lk()
+{
+    $query = "Select p.name, s.percent, t.rus_name, l.name as language From polzov p";
+    $query .= " INNER JOIN statistic s ON s.id_polzov = p.id_polzov";
+    $query .= " INNER JOIN task t ON t.id_task = s.id_task";
+    $query .= " INNER JOIN lang l ON l.id_lang = s.id_lang";
+    $query .= " Where p.id_polzov = ".$_SESSION['id'];
+    $context = LoadDataFromDB($query);
+
+    $render = new Render("templates/lk.php", $context);
+    return $render -> renderPage();
+}
+
 function loadBase()
 {
     if (!isset($_SESSION['login'])) {
