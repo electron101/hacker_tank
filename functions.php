@@ -39,7 +39,9 @@ function loadStart($str)
 {
     $query = $str . " Where t.id_lesson = (Select id_lesson From lessons order by id_lesson Limit 1)
 		Order By t.id_task";
-    $context = LoadDataFromDB($query);
+    $context['tasks'] = LoadDataFromDB($query);
+    $query_stat = "Select * From statistic Where id_polzov = ".$_SESSION['id'];
+    $context['stat'] = LoadDataFromDB($query_stat);
     $render = new Render("templates/start_page.php", $context);
     return $render->renderPage();
 }
@@ -50,7 +52,9 @@ function load_task_list_to_main_content($str)
     $input = $GLOBALS['input'];
     $id_lesson = isset($input['id']) ? $input['id'] : "";
     $query = $str . " Where t.id_lesson=$id_lesson Order by t.id_task";
-    $context = LoadDataFromDB($query);
+    $query_stat = "Select * From statistic Where id_polzov = ".$_SESSION['id'];
+    $context['tasks'] = LoadDataFromDB($query);
+    $context['stat'] = LoadDataFromDB($query_stat);
     $render = new Render("templates/start_page.php", $context);
     return $render->renderPage();
 }
