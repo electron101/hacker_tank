@@ -271,7 +271,7 @@ function admin_categories()
 {
     $query = "Select * From category";
     $context = LoadDataFromDB($query);
-    $render = new Render("templates\categories.php", $context);
+    $render = new Render("templates/categories.php", $context);
     return $render->renderPage();
 }
 
@@ -321,7 +321,7 @@ function admin_lessons()
 {
     $query = "Select * From lessons";
     $context = LoadDataFromDB($query);
-    $render = new Render("templates\lessons.php", $context);
+    $render = new Render("templates/lessons.php", $context);
     return $render->renderPage();
 }
 
