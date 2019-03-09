@@ -427,33 +427,36 @@ namespace cyclic_rotation
 
 // you can write to stdout for debugging purposes, e.g.
 // Console.WriteLine("this is a debug message");
-
 class Solution {
-    public int[] solution(int[] A, int K) {
-        // write your code in C# 6.0 with .NET 4.5 (Mono)
-      K += 1;
-      int l = A.Length;
-            int start = l - K;
-            int [] outA = new int [l];
-            int j = 0;
-            if (l == 0 || K == 0)
-            {
+        public int[] solution(int[] A, int K) {
+                // write your code in C# 6.0 with .NET 4.5 (Mono)
+
+                int N = A.Length;
+
+                if (K == N)
+                        return A;
+
+                if (N == 1)
+                        return A;
+
+                if (K == 0 || N == 0)
+                        return A;
+
+
+                int[] B = new int[N];
+
+                for (int j = 0; j < K; ++j) {
+                        B[0] = A[N - 1];
+
+                        for (int i = 0; i < N - 1; ++i)
+                                B[i + 1] = A[i];
+
+                        for (int i = 0; i < N; ++i) 
+                                A[i] = B[i];
+                }
+
+                A = B;
+
                 return A;
-            }
-            if (start < 0)
-            {
-                start = -(start - 1);
-            }
-            for (int i = start; i < l; i++)
-            {
-                outA[j] = A[i];
-                j++;
-            }
-            for (int m = 0; m < start; m++)
-            {
-                outA[j] = A[m];
-                j++;
-            }
-            return outA;
-    }
+        }
 }

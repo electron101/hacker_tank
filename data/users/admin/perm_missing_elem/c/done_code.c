@@ -1,129 +1,129 @@
-using System;
-using System.Diagnostics;
+#include <stdio.h>
+#include <time.h>
+#include "perm_missing_elem.h"
 
-namespace perm_missing_elem
-{ 
-	class MainClass
-	{
-		public static void Main (string[] args)
-		{
-			int           i;
-			int           result;
-			test_struct[] ext_tests;
-			double        time_spent;
-			Stopwatch     sw = new Stopwatch();
-			
-			ext_tests = new test_struct[PermMissingElem.COUNT_EXAMPLE_TEST + 
-				PermMissingElem.COUNT_CORRECT_TEST];
-	
-			/*--------------*/
-			/* EXAMPLE TEST */
-			/*--------------*/
+int main()
+{
+	int     i;
+	int     result;
+	struct  test_extend ext_tests[COUNT_EXAMPLE_TEST + COUNT_CORRECT_TEST];
+	clock_t begin;
+	clock_t end;
+	double  time_spent;
 
-			ext_tests[0].SetValueExtand( 
-				new head_t(category_test.EXAMPLE,
-				"example1",
-				"first example test"),
-				new int[]{2, 3, 1, 5},
-				4, 
-				4
-			);
 
-			ext_tests[1].SetValueExtand( 
-				new head_t(category_test.CORRECT,
-				"empty_and_single",
-				"empty list and single element"),
-				new int[]{},
-				1,
-				0
-			);
-			
-			ext_tests[2].SetValueExtand( 
-				new head_t(category_test.CORRECT,
-				"empty_and_single",
-				"empty list and single element"),
-				new int[]{2},
-				1,
-				1
-			);
-		
-			ext_tests[3].SetValueExtand( 
-				new head_t(category_test.CORRECT,
-				"missing_first_or_last",
-				"the first or the last element is missing"),
-				new int[]{1, 2, 3, 4, 5},
-				6,
-				5
-			);
+	/*--------------*/
+	/* EXAMPLE TEST */
+	/*--------------*/
 	
-			ext_tests[4].SetValueExtand( 
-				new head_t(category_test.CORRECT,
-				"missing_first_or_last",
-				"the first or the last element is missing"),
-				new int[]{2, 3, 4, 5, 6},
-				1,
-				5
-			);
-		
-			ext_tests[5].SetValueExtand( 
-				new head_t(category_test.CORRECT,
-				"single",
-				"single element"),
-				new int[]{1},
-				2,
-				1
-			);
-			
-			ext_tests[6].SetValueExtand( 
-				new head_t(category_test.CORRECT,
-				"single",
-				"single element"),
-				new int[]{2},
-				1,
-				1
-			);
-			
-			ext_tests[7].SetValueExtand( 
-				new head_t(category_test.CORRECT,
-				"double",
-				"two element"),
-				new int[]{1, 2},
-				3,
-				2
-			);
+	ext_tests[0] = (struct test_extend){
+		EXAMPLE,
+		"example",
+		"example test",
+		(int []){2, 3, 1, 5},
+		4,
+		4
+	};
 	
-			ext_tests[8].SetValueExtand( 
-				new head_t(category_test.CORRECT,
-				"double",
-				"two element"),
-				new int[]{1, 3},
-				2,
-				2
-			);
+	/*--------------*/
+	/* CORRECT TEST */
+	/*--------------*/
 
-			ext_tests[9].SetValueExtand( 
-				new head_t(category_test.CORRECT,
-				"double",
-				"two element"),
-				new int[]{2, 3},
-				1,
-				2
-			);
-			
-			ext_tests[10].SetValueExtand( 
-				new head_t(category_test.CORRECT,
-				"simple",
-				"simple test"),
-				new int[]{5, 8, 4, 3, 1, 6, 2},
-				7,
-				7
-			);
+	ext_tests[1] = (struct test_extend) {
+		CORRECT,
+		"empty_and_single",
+		"empty list and single element",
+		(int []){},
+		1,
+		0
+	};
 	
-			ext_tests[11].SetValueExtand( 
-				new head_t(category_test.CORRECT,
-				"medium1",
-				"medium test, length = ~10,000"),
-				new int[]{
+	ext_tests[2] = (struct test_extend) {
+		CORRECT,
+		"empty_and_single",
+		"empty list and single element",
+		(int []){2},
+		1,
+		1
+	};
+	
+	ext_tests[3] = (struct test_extend) {
+		CORRECT,
+		"missing_first_or_last",
+		"the first or the last element is missing",
+		(int []){1, 2, 3, 4, 5},
+		6,
+		5
+	};
+	
+	ext_tests[4] = (struct test_extend) {
+		CORRECT,
+		"missing_first_or_last",
+		"the first or the last element is missing",
+		(int []){2, 3, 4, 5, 6},
+		1,
+		5
+	};
+	
+	ext_tests[5] = (struct test_extend) {
+		CORRECT,
+		"single",
+		"single element",
+		(int []){1},
+		2,
+		1
+	};
+
+	ext_tests[6] = (struct test_extend) {
+		CORRECT,
+		"single",
+		"single element",
+		(int []){2},
+		1,
+		1
+	};
+
+	ext_tests[7] = (struct test_extend) {
+		CORRECT,
+		"double",
+		"two element",
+		(int []){1, 2},
+		3,
+		2
+	};
+	
+	ext_tests[8] = (struct test_extend) {
+		CORRECT,
+		"double",
+		"two element",
+		(int []){1, 3},
+		2,
+		2
+	};
+	
+	ext_tests[9] = (struct test_extend) {
+		CORRECT,
+		"double",
+		"two element",
+		(int []){2, 3},
+		1,
+		2
+	};
+
+	ext_tests[10] = (struct test_extend) {
+		CORRECT,
+		"simple",
+		"simple test",
+		(int []){5, 8, 4, 3, 1, 6, 2},
+		7,
+		7
+	};
+	
+	ext_tests[11] = (struct test_extend) {
+		CORRECT,
+		"medium1",
+		"medium test, length = ~10,000",
+		(int []){
 8225, 1784, 8681, 8247, 8959, 2445, 6843, 2059, 3950, 7034, 6996, 145, 720,
 4736, 4783, 9152, 4789, 7914, 5655, 2975, 6483, 6007, 6014, 7439, 5787, 3818,
 6570, 4838, 2113, 4272, 7601, 8522, 7178, 7764, 651, 7140, 9380, 4415,
@@ -892,13 +892,13 @@ namespace perm_missing_elem
 		60,
 		9999
 		/* 10000 */
-	);
+	};
 
-		ext_tests[12].SetValueExtand( 
-			new head_t(category_test.CORRECT,
-			"medium2",
-			"medium test, length = ~10,000"),
-			new int[]{
+	ext_tests[12] = (struct test_extend) {
+		CORRECT,
+		"medium2",
+		"medium test, length = ~10,000",
+		(int []){
 8225, 1784, 8681, 8247, 8959, 2445, 6843, 2059, 3950, 7034, 6996, 145, 720,
 4736, 4783, 9152, 4789, 7914, 5655, 2975, 6483, 6007, 6014, 7439, 5787, 3818,
 6570, 4838, 2113, 4272, 7601, 8522, 60, 7178, 7764, 651, 7140, 9380, 4415,
@@ -1667,21 +1667,49 @@ namespace perm_missing_elem
 		9998,
 		9999
 		/* 10000 */
-	);
-			
-			Solution s = new Solution();
-			
-			/* Вывод в консоль */
-			for (i = 0; i < ext_tests.Length; ++i) {
-				sw.Start();
-				result = s.solution(ext_tests[i].A);
-				sw.Stop();
-				
-				// время в секундах
-				time_spent = sw.ElapsedMilliseconds/100.0;
+	};
+	
 
-				General.out_to_console(result, ext_tests[i], time_spent);
-			}
-		}
+	/* Вывод в консоль */
+	for (i = 0; i < COUNT_EXAMPLE_TEST + COUNT_CORRECT_TEST; ++i) {
+		/* errno = 0; */
+		begin = clock();
+		result = solution(ext_tests[i].A, ext_tests[i].N);
+		end = clock();
+		
+		/* время в секундах */
+		time_spent = (double)(end - begin) / CLOCKS_PER_SEC;
+		// /* округление секунд до тысячных (0.001) или (0.034) */
+		// time_spent = round((time_spent) * 1000 + 0.5) / 1000; 
+		
+		out_to_console (result, ext_tests[i], time_spent);
 	}
+	return 0;
+}
+// you can write to stdout for debugging purposes, e.g.
+// printf("this is a debug message\n");
+int solution(int A[], int N) {
+        // write your code in C99 (gcc 6.2.0)
+        int i;
+        int tmp_count = 0;
+        int tmp_zero  = -1;
+        int B[1000000] = {0};
+
+        for (i = 0; i < N; ++i) 
+                B[A[i]] = 1;
+
+        for (i = 1; i < 1000000; ++i) {
+                if (tmp_count == N) {
+                    if (tmp_zero == -1)
+                        tmp_zero = N + 1;
+                    return tmp_zero;
+                }
+       
+                if (B[i] == 1)
+                        tmp_count++;
+                
+                if (B[i] == 0)
+                        tmp_zero = i;
+        }
+        return tmp_zero;
 }

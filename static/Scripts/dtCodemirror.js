@@ -43,6 +43,7 @@ $(document).ready(function () {
             data: { 'act': "compile_this", 'val': val, 'code': code, 'lang': lang, 'task_name': task_name },
             cache: false
         }).done(function (msg) {
+            // $("#output").append(msg);
             var result_array = msg.split("|");
             result_array.pop();
             length = result_array.length;
@@ -52,7 +53,7 @@ $(document).ready(function () {
             html1 += "<tr><th style='background-color: lightgrey;'><h5><b>ПРОСТЫЕ ТЕСТЫ</b></h5></th><th style='background-color: lightgrey;'> </th></tr>";
             for (i=0; i<length; i+=6)
             {
-                if (result_array[i].indexOf("EXAMPLE") != -1)
+                if (result_array[i].indexOf("EXAMPLE") != -1 || result_array[i].indexOf("0") != -1)
                 {
                     html1 += "<tr>";
                     html1 += "<td style='width: 45%'><h6><b>" + result_array[i+1] + "</b></h6>" +
@@ -79,7 +80,7 @@ $(document).ready(function () {
             html2 += "<tr><th style='background-color: lightgrey;'><h5><b>КОРРЕКТНОСТЬ</b></h5></th><th style='background-color: lightgrey;'> </th></tr>";
             for (i=0; i<length; i+=6)
             {
-                if (result_array[i].indexOf("CORRECT") != -1)
+                if (result_array[i].indexOf("CORRECT") != -1 || result_array[i].indexOf("1") != -1)
                 {
                     html2 += "<tr>";
                     html2 += "<td style='width: 45%'><h6><b>" + result_array[i+1] + "</b></h6>" +
