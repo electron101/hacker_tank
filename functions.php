@@ -42,7 +42,7 @@ function loadStart($str)
     $context['tasks'] = LoadDataFromDB($query);
     if (isset($_SESSION['id']))
     {
-        $query_stat = "Select * From statistic Where id_polzov = ".$_SESSION['id'];
+        $query_stat = "Select percent, id_task From statistic Where id_polzov = ".$_SESSION['id']." ORDER BY percent desc LIMIT 1";
         $context['stat'] = LoadDataFromDB($query_stat);
     }
     else
@@ -59,7 +59,7 @@ function load_task_list_to_main_content($str)
     $query = $str . " Where t.id_lesson=$id_lesson Order by t.id_task";
     if (isset($_SESSION['id']))
     {
-        $query_stat = "Select * From statistic Where id_polzov = ".$_SESSION['id'];
+        $query_stat = "Select percent, id_task From statistic Where id_polzov = ".$_SESSION['id']." ORDER BY percent desc LIMIT 1";
         $context['stat'] = LoadDataFromDB($query_stat);
     }
     else
