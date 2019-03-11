@@ -687,6 +687,11 @@ function Delete()
     switch ($from) {
         case "del_users":
             $query = "Delete From polzov Where id_polzov = ?";
+            $user_name = "SELECT name  From polzov WHERE id_polzov = ".$id;
+            $context = LoadDataFromDB($user_name);
+            $user_login = $context['data'][0]['name'];
+            $path_to_dir = "data/users/".$user_login."/";
+            AddFunc::delete_directory($path_to_dir);
             break;
         case "del_category":
             $query = "Delete From category Where id_category = ?";
@@ -733,6 +738,19 @@ function Del_Test($id)
     $types2 = 'i';
     bd_interaction($query_del2, $params2, $types2);
 
+    /** Удаляем этот тест из папок пользователей */
+    $query_all_users = "SELECT name FROM polzov";
+    $context = LoadDataFromDB($query_all_users);
+    if (count($context['data'])>0)
+    {
+        for ($i=0; $i<count($context['data']); $i++)
+        {
+            $path = "data/users/".$context['data'][$i]['name']."/".$name;
+            if (file_exists($path))
+                AddFunc::delete_directory($path);
+        }
+    }
+
     AddFunc::delete_directory($dir);
 
     return true;
@@ -744,7 +762,7 @@ function create_file_structure($name, $loc)
 {
     switch ($loc) {
         case "users":
-            mkdir("data/users/$name", 777);
+            mkdir("data/users/$name", 0777);
             break;
     }
 }

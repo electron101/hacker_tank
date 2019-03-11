@@ -1,5 +1,15 @@
 #include "general.h"
 
+int cmp_arr(int one[], int two[], int N) {
+	int i;
+	
+	for (i = 0; i < N; ++i) {
+		if (one[i] != two[i])
+			return 1;
+	}
+	return 0;
+}
+
 void print_arr(int A[], int N) {
 	int i;
 

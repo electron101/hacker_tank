@@ -33,7 +33,7 @@
                     <label for="category">Сложность</label>
                     <select name="category" id="category" class="form-control select2">
                         <?php for ($i = 0; $i < count($context['categories']['data']); $i++) : ?>
-                            <?php if ($context['categories']['data'][$i]['id_category'] == $context['task']['data'][$i]['id_category']) : ?>
+                            <?php if ($context['categories']['data'][$i]['id_category'] == $context['task']['data'][0]['id_category']) : ?>
                                 <option value="<?= $context['categories']['data'][$i]['id_category'] ?>" selected><?= $context['categories']['data'][$i]['name'] ?></option>
                             <?php else : ?>
                                 <option value="<?= $context['categories']['data'][$i]['id_category'] ?>"><?= $context['categories']['data'][$i]['name'] ?></option>
@@ -52,7 +52,7 @@
                     <label for="lesson">Тема</label>
                     <select name="lesson" id="lesson" class="form-control select2">
                         <?php for ($i = 0; $i < count($context['lessons']['data']); $i++) : ?>
-                            <?php if ($context['lessons']['data'][$i]['id_lesson'] == $context['task']['data'][$i]['id_lesson']) : ?>
+                            <?php if ($context['lessons']['data'][$i]['id_lesson'] == $context['task']['data'][0]['id_lesson']) : ?>
                                 <option value="<?= $context['lessons']['data'][$i]['id_lesson'] ?>" selected><?= $context['lessons']['data'][$i]['description'] ?></option>
                             <?php else : ?>
                                 <option value="<?= $context['lessons']['data'][$i]['id_lesson'] ?>"><?= $context['lessons']['data'][$i]['description'] ?></option>

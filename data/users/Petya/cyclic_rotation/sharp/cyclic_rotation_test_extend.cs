@@ -422,38 +422,3 @@ namespace cyclic_rotation
 		}
 	}
 }
-// you can also use other imports, for example:
-// using System.Collections.Generic;
-
-// you can write to stdout for debugging purposes, e.g.
-// Console.WriteLine("this is a debug message");
-
-class Solution {
-    public int[] solution(int[] A, int K) {
-        // write your code in C# 6.0 with .NET 4.5 (Mono)
-      K += 1;
-        int l = A.Length;
-            int start = l - K;
-            int [] outA = new int [l];
-            int j = 0;
-            if (l == 0 || K == 0)
-            {
-                return A;
-            }
-            if (start < 0)
-            {
-                start = -(start - 1);
-            }
-            for (int i = start; i < l; i++)
-            {
-                outA[j] = A[i];
-                j++;
-            }
-            for (int m = 0; m < start; m++)
-            {
-                outA[j] = A[m];
-                j++;
-            }
-            return outA;
-    }
-}
