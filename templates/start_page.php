@@ -5,7 +5,17 @@
             <div class="box-body">
                 <div class="box box-solid">
                     <div class="box-header with-border">
-                        <h3 class="box-title"><?=$context['tasks']['data'][0]['description']?></h3>
+                        <h3 class="box-title">
+                        <?php 
+                            if (count($context['tasks']['data']) > 0) 
+                            {
+                                echo $context['tasks']['data'][0]['description'];
+                            }
+                            else
+                            {  
+                                echo '<p>Тесты еще не добавлены</p>'; 
+                            }
+                            ?></h3>
                     </div>
                     <div class="box-body no-padding">
                         <table class="table table-condensed" id="task_list" style="padding-bottom: 10px;">
