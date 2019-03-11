@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Хост: localhost:3306
--- Время создания: Мар 05 2019 г., 09:23
+-- Время создания: Мар 11 2019 г., 18:08
 -- Версия сервера: 5.7.25-0ubuntu0.18.04.2
 -- Версия PHP: 7.2.15-0ubuntu0.18.04.1
 
@@ -113,7 +113,8 @@ CREATE TABLE `polzov` (
 --
 
 INSERT INTO `polzov` (`id_polzov`, `name`, `pas`, `role`) VALUES
-(1, 'admin', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', 0);
+(1, 'admin', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', 0),
+(5, 'Petya', '356a192b7913b04c54574d18c28d46e6395428ab', 1);
 
 -- --------------------------------------------------------
 
@@ -134,7 +135,10 @@ CREATE TABLE `statistic` (
 --
 
 INSERT INTO `statistic` (`id_statistic`, `id_polzov`, `id_task`, `percent`, `id_lang`) VALUES
-(1, 1, 1, 100, 2);
+(1, 1, 1, 100, 2),
+(2, 1, 1, 50, 2),
+(3, 3, 1, 100, 2),
+(4, 4, 1, 100, 2);
 
 -- --------------------------------------------------------
 
@@ -157,8 +161,7 @@ CREATE TABLE `task` (
 --
 
 INSERT INTO `task` (`id_task`, `name`, `rus_name`, `text`, `id_category`, `tex_min`, `id_lesson`) VALUES
-(1, 'cyclic_rotation', 'Циклическое вращение', '<p>&nbsp;Задан массив A, состоящий из N целых чисел. Вращение массива означает, что каждый элемент смещается вправо на один индекс, а последний элемент массива перемещается на первое место. Например, поворот массива A = [3, 8, 9, 7, 6] равен [6, 3, 8, 9, 7] (элементы смещены вправо на один индекс, а 6 - на первое место).</p>\r\n\r\n<p>Цель состоит в том, чтобы вращать массив A K раз; то есть каждый элемент A будет сдвинут вправо K раз.</p>\r\n\r\n<p>Напишите функцию:</p>\r\n\r\n<p>class Solution {public int [] solution (int [] A, int K); }</p>\r\n\r\n<p>что, учитывая массив A, состоящий из N целых чисел и целого числа K, возвращает массив A, повернутый K раз.</p>\r\n\r\n<p>Например, учитывая</p>\r\n\r\n<p>&nbsp;&nbsp;&nbsp;&nbsp;A = [3, 8, 9, 7, 6]<br />\r\n&nbsp;&nbsp;&nbsp;&nbsp;К = 3</p>\r\n\r\n<p>функция должна вернуть [9, 7, 6, 3, 8]. Три поворота были сделаны:</p>\r\n\r\n<p>&nbsp;&nbsp;&nbsp;&nbsp;[3, 8, 9, 7, 6] -&gt; [6, 3, 8, 9, 7]<br />\r\n&nbsp;&nbsp;&nbsp;&nbsp;[6, 3, 8, 9, 7] -&gt; [7, 6, 3, 8, 9]<br />\r\n&nbsp;&nbsp;&nbsp;&nbsp;[7, 6, 3, 8, 9] -&gt; [9, 7, 6, 3, 8]</p>\r\n\r\n<p>Для другого примера, приведенного</p>\r\n\r\n<p>&nbsp;&nbsp;&nbsp;&nbsp;A = [0, 0, 0]<br />\r\n&nbsp;&nbsp;&nbsp;&nbsp;К = 1</p>\r\n\r\n<p>функция должна вернуть [0, 0, 0]</p>\r\n\r\n<p>Дано</p>\r\n\r\n<p>&nbsp;&nbsp;&nbsp;&nbsp;A = [1, 2, 3, 4]<br />\r\n&nbsp;&nbsp;&nbsp;&nbsp;К = 4</p>\r\n\r\n<p>функция должна вернуть [1, 2, 3, 4]</p>\r\n\r\n<p>Предположим, что:</p>\r\n\r\n<p>N и K - целые числа в диапазоне [0..100]; каждый элемент массива A является целым числом в диапазоне [&minus;1,000..1,000]. В вашем решении сосредоточьтесь на правильности. Эффективность вашего решения не будет в центре внимания оценки.</p>\r\n', 1, 'Поверните массив вправо на указанное количество шагов.', 1),
-(19, 'PermMissingElem', 'Найти пропущенный элемент', '<p>Задан массив A, состоящий из N различных целых чисел. Массив содержит целые числа в диапазоне [1 .. (N + 1)], что означает, что отсутствует только один элемент.</p>\r\n\r\n<p>Ваша цель - найти этот недостающий элемент.</p>\r\n\r\n<p>Напишите функцию:</p>\r\n\r\n<p>которая, учитывая массив A, возвращает значение отсутствующего элемента.</p>\r\n\r\n<p>Например, заданный массив A такой, что:</p>\r\n\r\n<p>&nbsp;&nbsp;&nbsp;A [0] = 2<br />\r\n&nbsp;&nbsp;&nbsp;A [1] = 3<br />\r\n&nbsp;&nbsp;&nbsp;A [2] = 1<br />\r\n&nbsp;&nbsp;&nbsp;A [3] = 5<br />\r\nфункция должна вернуть 4, так как это отсутствующий элемент.</p>\r\n\r\n<p>Напишите эффективный алгоритм для следующих предположений:</p>\r\n\r\n<p>N является целым числом в диапазоне [0, 100 000];<br />\r\nвсе элементы А различны;<br />\r\nкаждый элемент массива A является целым числом в диапазоне [1 .. (N + 1)].</p>\r\n', 1, 'Найдите недостающий элемент в данной перестановке.', 5);
+(1, 'cyclic_rotation', 'Циклическое вращение', '<p>&nbsp;Задан массив A, состоящий из N целых чисел. Вращение массива означает, что каждый элемент смещается вправо на один индекс, а последний элемент массива перемещается на первое место. Например, поворот массива A = [3, 8, 9, 7, 6] равен [6, 3, 8, 9, 7] (элементы смещены вправо на один индекс, а 6 - на первое место).</p>\r\n\r\n<p>Цель состоит в том, чтобы вращать массив A K раз; то есть каждый элемент A будет сдвинут вправо K раз.</p>\r\n\r\n<p>Напишите функцию:</p>\r\n\r\n<p>class Solution {public int [] solution (int [] A, int K); }</p>\r\n\r\n<p>что, учитывая массив A, состоящий из N целых чисел и целого числа K, возвращает массив A, повернутый K раз.</p>\r\n\r\n<p>Например, учитывая</p>\r\n\r\n<p>&nbsp;&nbsp;&nbsp;&nbsp;A = [3, 8, 9, 7, 6]<br />\r\n&nbsp;&nbsp;&nbsp;&nbsp;К = 3</p>\r\n\r\n<p>функция должна вернуть [9, 7, 6, 3, 8]. Три поворота были сделаны:</p>\r\n\r\n<p>&nbsp;&nbsp;&nbsp;&nbsp;[3, 8, 9, 7, 6] -&gt; [6, 3, 8, 9, 7]<br />\r\n&nbsp;&nbsp;&nbsp;&nbsp;[6, 3, 8, 9, 7] -&gt; [7, 6, 3, 8, 9]<br />\r\n&nbsp;&nbsp;&nbsp;&nbsp;[7, 6, 3, 8, 9] -&gt; [9, 7, 6, 3, 8]</p>\r\n\r\n<p>Для другого примера, приведенного</p>\r\n\r\n<p>&nbsp;&nbsp;&nbsp;&nbsp;A = [0, 0, 0]<br />\r\n&nbsp;&nbsp;&nbsp;&nbsp;К = 1</p>\r\n\r\n<p>функция должна вернуть [0, 0, 0]</p>\r\n\r\n<p>Дано</p>\r\n\r\n<p>&nbsp;&nbsp;&nbsp;&nbsp;A = [1, 2, 3, 4]<br />\r\n&nbsp;&nbsp;&nbsp;&nbsp;К = 4</p>\r\n\r\n<p>функция должна вернуть [1, 2, 3, 4]</p>\r\n\r\n<p>Предположим, что:</p>\r\n\r\n<p>N и K - целые числа в диапазоне [0..100]; каждый элемент массива A является целым числом в диапазоне [&minus;1,000..1,000]. В вашем решении сосредоточьтесь на правильности. Эффективность вашего решения не будет в центре внимания оценки.</p>\r\n', 1, 'Поверните массив вправо на указанное количество шагов.', 1);
 
 -- --------------------------------------------------------
 
@@ -179,9 +182,7 @@ CREATE TABLE `task_lang` (
 
 INSERT INTO `task_lang` (`id_task_lang`, `id_task`, `id_lang`, `template_link_folder_code`) VALUES
 (16, 1, 1, 'data/code_templates/cyclic_rotation/c/'),
-(17, 1, 2, 'data/code_templates/cyclic_rotation/sharp/'),
-(24, 19, 1, 'data/code_templates/PermMissingElem/c/'),
-(25, 19, 2, 'data/code_templates/PermMissingElem/sharp/');
+(17, 1, 2, 'data/code_templates/cyclic_rotation/sharp/');
 
 --
 -- Индексы сохранённых таблиц
@@ -263,17 +264,17 @@ ALTER TABLE `lang`
 -- AUTO_INCREMENT для таблицы `lessons`
 --
 ALTER TABLE `lessons`
-  MODIFY `id_lesson` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id_lesson` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 --
 -- AUTO_INCREMENT для таблицы `polzov`
 --
 ALTER TABLE `polzov`
-  MODIFY `id_polzov` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id_polzov` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 --
 -- AUTO_INCREMENT для таблицы `statistic`
 --
 ALTER TABLE `statistic`
-  MODIFY `id_statistic` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id_statistic` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 --
 -- AUTO_INCREMENT для таблицы `task`
 --
