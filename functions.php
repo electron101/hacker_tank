@@ -51,6 +51,17 @@ function loadStart($str)
     return $render->renderPage();
 }
 
+/** Просмотр тестов */
+function Show()
+{
+    $input = $GLOBALS['input'];
+    $id_task = $input['id'];
+    $query = "SELECT id_task, name, rus_name, text From task Where id_task = ".$id_task;
+    $context = LoadDataFromDB($query);
+    $render = new Render("templates/preview.php", $context);
+    return $render->renderPage();
+}
+
 /** Загрузка заданий по уроку */
 function load_task_list_to_main_content($str)
 {

@@ -121,6 +121,9 @@ switch ($act) {
 	case "del_users":
 		DeleteConfirmation();
 		break;
+	case "show":
+		Show();
+		break;
 	case "del_category":
 		DeleteConfirmation();
 		break;
