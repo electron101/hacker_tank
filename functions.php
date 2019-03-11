@@ -492,6 +492,7 @@ function update_test()
     $need_update_csharp = isset($input['need_update_csharp']) ? $input['need_update_csharp'] : "off";
 
     $name = isset($input['name']) ? $input['name'] : "";
+    $old_name = isset($input['old_name']) ? $input['old_name'] : "";
     $rus_name = isset($input['rus_name']) ? $input['rus_name'] : "";
     $text = isset($input['editor1']) ? $input['editor1'] : "";
     $category = isset($input['category']) ? $input['category'] : "";
@@ -505,6 +506,15 @@ function update_test()
     $res = bd_interaction($insert_query, $params, $types);
 
     $uploaddir = "data/code_templates/" . $name . "/";
+    $old_dir = "data/code_templates/" . $old_name . "/";
+
+    /** Обновляем имя корневой папки теста */
+    if (!file_exists($uploaddir))
+    {
+        if ($uploaddir != $old_dir)
+            rename($old_dir, $uploaddir);
+    }
+
     if ($need_update_c == "on") {
         if ($input['c-files']['name'] == "") {
             //Удаляем файлы и запись в бд

@@ -14,6 +14,7 @@
                 <div class="form-group">
                     <label for="name">Наименование</label>
                     <input type="text" name="name" id="name" value="<?= $context['task']['data'][0]['name'] ?>" class='form-control' required>
+                    <input type="hidden" name="old_name" id="old_name" value="<?= $context['task']['data'][0]['name'] ?>">
                 </div>
 
                 <div class="form-group">
