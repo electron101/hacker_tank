@@ -416,6 +416,10 @@ namespace cyclic_rotation
 				
 				// время в секундах
 				time_spent = sw.ElapsedMilliseconds/100.0;
+				
+				// по умолчанию тест выполняется за 0,001s
+				if (time_spent == 0.0)
+					time_spent = 0.001;
 
 				General.out_to_console(result2, ext_tests[i], time_spent);
 			}
